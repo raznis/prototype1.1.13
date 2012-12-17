@@ -1,0 +1,25 @@
+<plan>
+  <seq succ="False" time="9">
+    <seq succ="True" time="5">
+      <tsk time="1" succ="True" probability="[0.8, 0.5]"/>
+      <tsk time="1" succ="True" probability="[0.8, 0.5]"/>
+      <tsk time="1" succ="True" probability="[0.8, 0.5]"/>
+      <tsk time="1" succ="True" probability="[0.8, 0.5]"/>
+      <tsk time="1" succ="True" probability="[0.8, 0.5]"/>
+    </seq>
+    <seq succ="False" time="4">
+      <tsk time="1" succ="True" probability="[0.8, 0.5]"/>
+      <tsk time="1" succ="True" probability="[0.8, 0.5]"/>
+      <tsk time="2" succ="False" probability="[0.8, 0.5]"/>
+      <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
+      <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
+    </seq>
+    <seq>
+      <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
+      <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
+      <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
+      <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
+      <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
+    </seq>
+  </seq>
+</plan>
