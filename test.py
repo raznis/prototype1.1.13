@@ -278,17 +278,17 @@ def test10():
     pass
 #changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.
 def _createComputedDist(string = None):
-    from dist.computed import Computed
+    from distributions.computed import Computed
     return Computed()
     
 #changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.
 def _createNormalDist(parmM,parmG):
-   from dist.normal import Normal
+   from distributions.normal import Normal
    return Normal(float(parmM),float(parmG))
 
 #changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.        
 def _createUniformDist(parmA,parmB):
-   from dist.uniform import Uniform
+   from distributions.uniform import Uniform
    return Uniform(float(parmA),float(parmB))
 
 if __name__ == "__main__":
