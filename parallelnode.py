@@ -10,8 +10,8 @@ class ParallelNode (node):
     def __init__(self,treeInst,mytree,parent):
         node.__init__(self,treeInst,mytree,"parallel",parent)
     
-    def run (self, index):
-        node.run()
+    def run(self, index):
+        node.run(self, index)
         a = [False, 0]
         for i in self.getChildren():
             b = i.run(index)

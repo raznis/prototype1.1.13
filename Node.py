@@ -7,7 +7,7 @@ import random
 import re
 from lxml import etree
 
-
+#RAZ -- Adi, I see that "not" is still not a field, but a specific node type. Please change this.
 class node:
     #constractur- treeInstance-node in the etree, the etree itself, and prep-type(seq,plan etc.)
     def __init__(self,treeInstance = None,mytree = None,prep="plan",parent=None):
@@ -144,7 +144,7 @@ class node:
                     return self.childList[index]
              #run the node. each subclass should imple
         
-    def run (self, index):
+    def run(self, index):
         print "liat"
         #raise NotImplementedError("Subclasses should implement this!")    
 

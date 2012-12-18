@@ -1,3 +1,10 @@
 <plan>
-    <tsk probability="0.1 0.5" distributionSuccess="c[a,b] d[2,1]"/>
+  <seq>
+    <seq probability="0.1 0.5"/>
+    <not probability="0.1 0.5"/>
+    <loop probability="0.1 0.5"/>
+    <parallel probability="0.1 0.5"/>
+    <tsk probability="0.1 0.5"/>
+    <select probability="0.1 0.5"/>
+  </seq>
 </plan>

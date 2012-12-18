@@ -1,7 +1,8 @@
 from tree import xmlTree
 from Node import node
-import sys
-sys.path.append("/home/polak/Desktop/lxmlEtreeWiteDist/dist")
+#removed by RAZ -- not very good practice to depend on your folders when running the program on multiple computers. Instead, I added an empty __init__.py file to the dist directory, so python recognizes it as a module, and we can import from it.
+#import sys
+#sys.path.append("/home/polak/Desktop/lxmlEtreeWiteDist/dist")
 
 
 #create a tree from scratch
@@ -175,7 +176,7 @@ def test7():
     firstChild = root.addNode("parallel")
     if firstChild == None:
         print ("error creating seq node")
-        print("test 3: failed :-(")
+        print("test 7: failed :-(")
         return None
     
     
@@ -222,9 +223,9 @@ def test7():
     for childNode in firstChildList:
         count += 1
     if count == 3:
-        print("test 3: success! please check the file test4.xml - every tag need to have the same attrib.")
+        print("test 7: success! please check the file test4.xml - every tag need to have the same attrib.")
     else:
-        print("test 3: failed :-(")
+        print("test 7: failed :-(")
     
     #print the tree we built from scratch to xml file.
     #please check the file- every tag need to have the same attrib.
@@ -239,58 +240,66 @@ def test8():
    child = root.getChild(0)
    
    ### create a new dist - and 
-   dist = _createNormalDist(5,2)
+   dist_succ = _createNormalDist(5,2)
+   dist_fail = _createNormalDist(4,1)   
    #add to succ table
-   child.addDistToSuccTable(dist)
+   child.addDistToSuccTable(dist_succ)
    #add to fail table/
-   child.addDistToFailTable(dist)
+   child.addDistToFailTable(dist_fail)
    #get distribute from the node by it's index (p1,p2,p3..)
-   distGet = child.getSuccDistAtIndex(0)
+   dist_get_succ = child.getSuccDistAtIndex(0)
+   dist_get_fail = child.getFailDistAtIndex(0)
    #check that it has the same parms 
-   if (distGet!=None and distGet.parmM == float(5)):
+   #added by RAZ -- Adi, I made the tests a bit more complex, you should always have the tests as hard a possible, checking all possible cases.   
+   if (dist_get_succ != None and dist_get_succ.parmM == float(5) and dist_get_succ.parmG == float(2) and dist_get_fail != None and dist_get_fail.parmM == float(4) and dist_get_fail.parmG == float(1)):
        print ("test 8.1: success!")
 
    else:
         ("test 8.1: failed :-(")
         
     # try to create computed dist.
+   #added by RAZ -- Adi, I made the tests a bit more complex, you should always have the tests as hard a possible, checking all possible cases.
    dist = _createComputedDist()
    dist.setValueToTime(0.1,1)
-   
-   if (dist.getCountByTime(0.1) == 1):
+   dist.setValueToTime(0.1, dist.getCountByTime(0.1)+1 )
+   dist.setValueToTime(0.2,1)   
+   dist.setValueToTime(0.05,1)   
+   if (dist.getCountByTime(0.1) == 2 and dist.getCountByTime(0.2) == 1 and dist.getCountByTime(0.05) == 1):
        print ("test 8.2: success!")
-
    else:
         ("test 8.2: failed :-( - check computed dist")
+   #added by RAZ -- Adi please do this
+   print ("ADI - please add test for uniform distibution also.")
         
-   print ("1,2,3,4,5")
    
 def test9():
     pass
 def test10():
     pass
+#changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.
 def _createComputedDist(string = None):
-    from computed import Computed
+    from dist.computed import Computed
     return Computed()
     
-#just for the test.
+#changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.
 def _createNormalDist(parmM,parmG):
-   from normal import Normal
+   from dist.normal import Normal
    return Normal(float(parmM),float(parmG))
-        
+
+#changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.        
 def _createUniformDist(parmA,parmB):
-   from uniform import Uniform
+   from dist.uniform import Uniform
    return Uniform(float(parmA),float(parmB))
 
 if __name__ == "__main__":
     #run the 10 tests
-#    test1()
-#    test2()
-#    test3()
-#    test4()
-#    test5()
-#    test6()
-#    test7()
+     test1()
+     test2()
+     test3()
+     test4()
+     test5()
+     test6()
+     test7()
      test8()
 #    test9()
 #    test10()
