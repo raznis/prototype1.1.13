@@ -1,3 +1,0 @@
-<plan>
-    <tsk probability="0.1 0.5" distributionSuccess="c[a,b] d[2,1]"/>
-</plan>
