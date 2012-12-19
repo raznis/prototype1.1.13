@@ -1,6 +1,6 @@
 <plan>
   <seq>
-    <seq probability="0.1 0.5"/>
+    <tsk Successdistribution="C[0,1] U[0,5]/>
     <seq probability="0.1 0.5"/>
     <loop probability="0.1 0.5"/>
     <parallel probability="0.1 0.5"/>

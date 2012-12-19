@@ -12,10 +12,7 @@ class SelectNode (node):
     
     def run (self, index):
         a = [False, 0]
-#        if (self.getChildren() == []):
-#            a[1]= self.getRandomProb(index)
-#            a[0] = self.getTime()
-#        else:
+        tmpIndex = index
         for i in self.getChildren():                        
             b = i.run(index)           
             a[0] = a[0] or b[0]
@@ -24,5 +21,5 @@ class SelectNode (node):
             self.setTime(a[1])
             if b[0]:	  
                 break
-        	#i.printChildren()
+        self.setProbTableAtIndex(tmpIndex, a[0]) 
         return a    

@@ -9,12 +9,15 @@ from Node import node
 class TskNode (node):
     def __init__(self,treeInst,mytree,parent):
         node.__init__(self,treeInst,mytree,"tsk",parent)
-        #self.getDistFromAttrib()
-        #print ("tsk node has been created!")
-                
+        #self.getDistFromAttrib()                
         # not working yet..
-        self.createDistTable("distributionSuccess")
-    
+        self.distTableSucc = self.createDistTable("Successdistribution")
+        self.distTableFail = self.createDistTable("Failuredistribution")
+        
+        
+        
+        
+        
     def run (self, index):
         a = [True, 0]
         a[0]= self.getRandomProb(index)
@@ -39,6 +42,7 @@ class TskNode (node):
      #override the node func   
     def DEBUGnode(self,sSUCC=None,sTime=None):
         node.DEBUGnode(None,None)
+        #would you like to update success ans time success?
     
 #######################-----Adi changes(17/12/2012)-----####################
 
@@ -59,7 +63,6 @@ class TskNode (node):
     #table is the name of the table needed- attribute
     def createDistTable(self,table):
         string = self.getAttrib(str(table))
-        #print(string)
         
         table =[]        
         if string != None:
@@ -68,45 +71,90 @@ class TskNode (node):
          #   print (table[0])
         newDistTable =[]
         
-        
         #loop over the table- range (0,table len-1)- specifying the step value as 2
-        for index in range(0,len(table)-1,2):
+        for index in range(0,len(table)-1,1):
+
             #computed dist   
-            if (table[index] == 'C'):
-                pass
+            if (table[index][0] == 'C'):
+                newDistTable.append(self._createComputedDist(table[index]))
             #normal dist
-            if(table[index] =='N'):
-                s = str(table[index+1])
-                arr = s.split(',')
-                print (arr[0])
-                print(arr[1])
-                newDistTable.append(self._createNormalDist(arr[0],arr[1]))
+            if(str(table[index][0]) =='N'):
+                newDistTable.append(self._createNormalDist(table[index]))
             #discrete dist
-            if(table[index] == 'D'):
+            if(table[index][0] == 'D'):
                 pass
             #iniform dist- create new instance and 
-            if(table[index] == 'U'):
-                s = str(table[index+1])
-                arr = s.split(',')
-                newDistTable.append(self._createUniformDist(arr[0],arr[1]))
+            if(table[index][0] == 'U'):
+                newDistTable.append(self._createUniformDist(table[index]))
                 
         return newDistTable
             
         
-    def _createComputedDist(self,string):
-        pass
+    def _createComputedDist(self,Sinput):
+        ans =self._getDictOfNumPairFromString(Sinput)
+        from distributions.computed import Computed
+        return Computed(ans)        
     
-    def _createNormalDist(self,parmM,parmG):
-        from normal import Normal
-        return Normal(float(parmM),float(parmG))
-        
-    def _createUniformDist(self,parmA,parmB):
-        from uniform import Uniform
-        return Uniform(float(parmA),float(parmB))
+    def _createNormalDist(self,Sinput):
+      ans = self._getTwoNumFromString(Sinput)
+      from distributions.normal import Normal
+      return Normal(ans[0],ans[1])
+       
+       
+    def _createUniformDist(self,Sinput):
+       ans = self._getTwoNumFromString(Sinput)
+       from distributions.uniform import Uniform
+       return Uniform(ans[0],ans[1])
     
     def _createDiscreteDist(self,string):
         pass
      
 
-        
+    def _getTwoNumFromString(self,Sinput):
+      stringNumA = ""
+      stringNumB = ""
+      nextNum = False
+      
+      #loop over the string
+      for index in range(0, len(Sinput)):          
+          if (Sinput[index].isdigit() or Sinput[index]=='.' ) == True and (nextNum == False):
+              stringNumA += str( Sinput[index] )
+              continue
+          if(str(Sinput[index]) ==','):
+              nextNum= True
+              continue
+          if (Sinput[index].isdigit() or Sinput[index]=='.') == True and (nextNum == True):
+              stringNumB+= str(Sinput[index] ) 
+              continue
+              
+      
+      return [str(stringNumA),str(stringNumB)]
+      
+      
+      
+    # Sinput should look like this - C[123,123],[123,1231],[54,23] 
+    #input- the string above, output: disctionary of key and value
+    def _getDictOfNumPairFromString(self,Sinput):
+        openBracket = False
+        stringPair=""
+        PairList = {}
+        for index in range(0,len(Sinput)):
+            if Sinput[index] == '[' and openBracket == False :
+                openBracket = True
+                continue
+            if Sinput[index] == ']' and openBracket == True:
+                #call getTwoNumFromString func with stringPair and appand to the PairList
+                pair = self._getTwoNumFromString(stringPair)
+                PairList[str(pair[0])]= str(pair[1])
+                #update open bracket to close                
+                openBracket = False
+                #init the stringPair
+                stringPair = ""
+                continue
+            if openBracket == True :
+                stringPair += Sinput[index]
+                continue
+            
+        return PairList
+            
             

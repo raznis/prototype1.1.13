@@ -12,12 +12,8 @@ class SeqNode (node):
     
     def run (self, index):      
         a = [True, 0]
-#        if (self.getChildren() == []):
-#            a[1]= self.getRandomProb(index)
-#            a[0] = self.getTime()
-#        else:
-        for i in self.getChildren():
-                        
+        tmpIndex = index
+        for i in self.getChildren():                       
             b = i.run(index)           
             a[0] = a[0] and b[0]
             self.setSucc(a[0])
@@ -26,5 +22,6 @@ class SeqNode (node):
             if not b[0]:	  
                 break
         	#i.printChildren()
+        self.setProbTableAtIndex(tmpIndex, a[0]) 
         return a    
         

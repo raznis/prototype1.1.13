@@ -7,12 +7,17 @@ import random
 import re
 from lxml import etree
 
-#RAZ -- Adi, I see that "not" is still not a field, but a specific node type. Please change this.
+
 class node:
+    
+    #global variable - represents the amount of different parmeters of the world.
+    #it is a class attribute and can accessed via class node.parameterInTheWorld
+    #can be set from everywhere that import node
+    parmetersInTheWorld = 0
+    
     #constractur- treeInstance-node in the etree, the etree itself, and prep-type(seq,plan etc.)
     def __init__(self,treeInstance = None,mytree = None,prep="plan",parent=None):
-       # if treeInstance.tag != prep :
-       #   print ( "error. check node")
+
             
         # you can't have multiple __init__ functions in Python so we use mytree = None
         if mytree == None :
@@ -25,18 +30,28 @@ class node:
         self.succ = False
         self.time = 0
         self.parent = parent 
+        #node monitor property
         self.monitor = True
+        #node child list
         self.childList = []
+        #node probebility table
         self.probTable = []
+        # node distribution table for success and failure
         self.distTableSucc = []
         self.distTableFail = []
+        #update probability table
         probString = self.getAttrib("probability")
         if probString !=None:
             self.probTable = self._parseString(probString)
         else:
             self.probTable= None
+        
+        #node debuge child property
         self.DEBUGchild= False   
         self._updateChildDebug()
+        self.DEBUG = False
+        #node not property
+        self._updateNot()
             
         
         
@@ -56,9 +71,9 @@ class node:
 
     
     #getter for probIndex
-    def getProbAtIndex(self,index):
-        if self.probTable!=None and len(self.probTable) > index:
-            return self.probTable[index]
+#    def getProbAtIndex(self,index):
+#        if self.probTable!=None and len(self.probTable) > index:
+#            return self.probTable[index]
       
         return None
 
@@ -144,8 +159,8 @@ class node:
                     return self.childList[index]
              #run the node. each subclass should imple
         
-    def run(self, index):
-        print "liat"
+    #def run(self, index):
+    #    print "liat"
         #raise NotImplementedError("Subclasses should implement this!")    
 
     #input xml tree elem, create the node wrap    
@@ -166,9 +181,9 @@ class node:
             from loopnode import LoopNode
             return LoopNode(elem,self.myTree,self)
             #need to continue implementing the rest..
-        if elem.tag == "not":
-            from notnode import NotNode
-            return NotNode(elem,self.myTree,self)
+      # if elem.tag == "not":
+      #     from notnode import NotNode
+      #     return NotNode(elem,self.myTree,self)
         if elem.tag =="parallel":
             from parallelnode import ParallelNode 
             return ParallelNode(elem,self.myTree,self)
@@ -229,6 +244,21 @@ class node:
 
     def addDistToFailTable(self, dist):
         self.distTableFail.append(dist)
+    #try to read attribute from the xml file and update not node. if no attribute, update to False    
+    def _updateNot(self):
+        ans = self.getAttrib("not")
+        if ans!= None:
+            if str(ans) == "T":
+                self.isNot = True
+            else:
+                self.isNot = False
+                
+    #return true or false is this node is not
+    def isNot(self):
+        return self.isNot
+        
+    def isDEBUG(self):
+        return self.DEBUG
         
 #######################-----Liat changes-----###############################
 
@@ -237,7 +267,7 @@ class node:
     def getRandomProb(self, index):
         succprob = []
         x = random.random()
-        print x, self.getProbAtIndex(index)
+        #print x, self.getProbAtIndex(index)
         if (x <= self.getProbAtIndex(index)):
             self.setSucc(True)
             succprop = [True,self.getProbAtIndex(index)]
@@ -279,3 +309,35 @@ class node:
         else :
              self.succ = False
         self.setAttrib("succ",self.succ)
+        
+        
+    def setProbTableAtIndex(self, index, val):
+        if (self.probTable==None):
+            a = []
+            #rang have to be the num of 2^param - need from Adi 
+            for i in range(2):
+                a.append([0,0])
+            self.setProbTable(a)
+        if val:
+            self.probTable[index][0] = self.probTable[index][0]+1
+            self.probTable[index][1] = self.probTable[index][1]+1
+            self.setAttrib("probability",self.probTable)
+        else:
+            self.probTable[index][1] = self.probTable[index][1]+1
+            self.setAttrib("probability",self.probTable)
+   
+
+    #getter for probIndex
+    def getProbAtIndex(self,index):
+        if self.probTable!=None and len(self.probTable) > index:
+            if self.boolWhoAmI("tsk"):
+                return self.probTable[index]
+            else:                
+                return self.probTable[index][0]/self.probTable[index][1]                
+        return None
+     
+    def run(self, index):
+        print "liat"
+        if (self.DEBUGnode()):
+            return [True, 1]
+        #raise NotImplementedError("Subclasses should implement this!")   

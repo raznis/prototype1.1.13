@@ -1,17 +1,17 @@
 <plan>
   <parallel succ="False" time="4">
-    <seq succ="False" time="4">
-      <tsk time="1" succ="True" probability="[0.7, 0.5]"/>
+    <seq succ="False" time="3" probability="[[0, 1], [0, 0]]">
       <tsk time="1" succ="True" probability="[0.7, 0.5]"/>
       <tsk time="2" succ="False" probability="[0.7, 0.5]"/>
       <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
       <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
+      <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
     </seq>
-    <seq succ="False" time="4">
-      <tsk time="1" succ="True" probability="[0.7, 0.5]"/>
-      <tsk time="1" succ="True" probability="[0.7, 0.5]"/>
-      <seq succ="False" time="2">
-        <tsk time="2" succ="False" probability="[0.8, 0.5]"/>
+    <seq succ="False" time="2" probability="[[0, 1], [0, 0]]">
+      <tsk time="2" succ="False" probability="[0.7, 0.5]"/>
+      <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
+      <seq>
+        <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
         <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
         <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
         <tsk time="0" succ="False" probability="[0.8, 0.5]"/>
@@ -19,10 +19,10 @@
       <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
       <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
     </seq>
-    <seq succ="False" time="2">
+    <seq succ="False" time="4" probability="[[0, 1], [0, 0]]">
+      <tsk time="1" succ="True" probability="[0.7, 0.5]"/>
+      <tsk time="1" succ="True" probability="[0.7, 0.5]"/>
       <tsk time="2" succ="False" probability="[0.7, 0.5]"/>
-      <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
-      <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
       <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
       <tsk time="0" succ="False" probability="[0.7, 0.5]"/>
     </seq>

@@ -1,8 +1,6 @@
 from tree import xmlTree
 from Node import node
-#removed by RAZ -- not very good practice to depend on your folders when running the program on multiple computers. Instead, I added an empty __init__.py file to the dist directory, so python recognizes it as a module, and we can import from it.
-#import sys
-#sys.path.append("/home/polak/Desktop/lxmlEtreeWiteDist/dist")
+
 
 
 #create a tree from scratch
@@ -54,9 +52,9 @@ def test3():
     else:
         tempN.setAttrib("probability","0.1 0.5")
         
-    tempN = firstChild.addNode("not")
+    tempN = firstChild.addNode("seq")
     if tempN == None:
-        print ("error creating not node")
+        print ("error creating seq node")
     else:
         tempN.setAttrib("probability","0.1 0.5")
         
@@ -109,7 +107,7 @@ def test4():
     firstChild = root.getChild(0)
     ans.append(firstChild.boolWhoAmI("seq"))
     ans.append((firstChild.getChild(0)).boolWhoAmI("seq"))
-    ans.append((firstChild.getChild(1)).boolWhoAmI("not"))
+    ans.append((firstChild.getChild(1)).boolWhoAmI("seq"))
     ans.append((firstChild.getChild(2)).boolWhoAmI("loop"))
     ans.append((firstChild.getChild(3)).boolWhoAmI("parallel"))
     ans.append((firstChild.getChild(4)).boolWhoAmI("tsk"))
@@ -268,15 +266,49 @@ def test8():
        print ("test 8.2: success!")
    else:
         ("test 8.2: failed :-( - check computed dist")
-   #added by RAZ -- Adi please do this
-   print ("ADI - please add test for uniform distibution also.")
         
-   
+        
+        
+#this test read test9.xml and create distributaion as needed for tskNode 
 def test9():
-    pass
+   tree = xmlTree("test9.xml")
+   #root it node type plan
+   root = tree.getRoot()
+   
+   #this child is type- seq
+   child = root.getChild(0)
+   #this child is type- tsk
+   tskChild = child.getChild(0)
+   #get dist from the distTable
+   distC = tskChild.getSuccDistAtIndex(2)
+   distU = tskChild.getSuccDistAtIndex(1)
+   distN = tskChild.getSuccDistAtIndex(0)
+   
+
+       
+   if( distC.whoAmI() == "Computed" and float(distC.getCountByTime(0.1)) == 5 and float(distC.getCountByTime(257)) == 977):
+       print ("test 9.1: success!")
+   else:
+       ("test 9: failed :-( - check computed dist")  
+
+   if( distU.whoAmI() == "Uniform" and float(distU.parmA) == 0 and float(distU.parmB) == 5 ):
+       print ("test 9.2: success!")
+   else:
+       ("test 9.2: failed :-( - check uniform dist")  
+
+
+   if ( distN.whoAmI() == "Normal"):
+       print ("test 9.3: success!")
+   else:
+       ("test 9.3: failed :-( - check normal dist")      
+       
+       
+       
 def test10():
     pass
-#changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.
+
+
+#changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.#thanks
 def _createComputedDist(string = None):
     from distributions.computed import Computed
     return Computed()
@@ -293,14 +325,13 @@ def _createUniformDist(parmA,parmB):
 
 if __name__ == "__main__":
     #run the 10 tests
-     test1()
-     test2()
-     test3()
-     test4()
-     test5()
-     test6()
-     test7()
-     test8()
-#    test9()
+#    test1()
+#    test2()
+#    test3()
+#    test4()
+#    test5()
+#    test6()
+#    test7()
+#    test8()
+     test9()
 #    test10()
-    
