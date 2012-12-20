@@ -3,6 +3,7 @@
 
 @author: polak
 """
+import random
 from distribution import Distribution
 
 class Normal(Distribution):
@@ -14,8 +15,11 @@ class Normal(Distribution):
         
         
     def calcProb(self):
-        raise NotImplementedError("calcProb- Normal") 
+        return random.normalvariate(self.parmM, self.parmG)
     
     #for debaug     
     def whoAmI(self):
         return "Normal"
+        
+    def printMe (self):
+        print self.parmM ,self.parmG    

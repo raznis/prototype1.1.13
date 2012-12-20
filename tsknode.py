@@ -13,13 +13,19 @@ class TskNode (node):
         # not working yet..
         self.distTableSucc = self.createDistTable("Successdistribution")
         self.distTableFail = self.createDistTable("Failuredistribution")
+        self._readDebugFromAttrib()
         
         
         
         
         
     def run (self, index):
-        a = [True, 0]
+
+        b = node.run(self, index)
+        if (b!=None):
+            return b  
+            
+        a = [True, 0]        
         a[0]= self.getRandomProb(index)
         a[1] = self.getTime()
         # this information should be calculated as part of the tree
@@ -27,7 +33,9 @@ class TskNode (node):
 #            a[2] = self.getProbAtIndex(index)
 #        else:
 #            a[2] = self.getProbAtIndex(index)
-        print a
+        #print a
+        if (self.getNot()):
+            a[0] = not(a[0])
         return a
         
     #override the node func- tsk dosn't have children   
@@ -40,8 +48,9 @@ class TskNode (node):
         
         
      #override the node func   
-    def DEBUGnode(self,sSUCC=None,sTime=None):
+    def setDEBUGnode(self,sSucc=None,sTime=None):
         node.DEBUGnode(None,None)
+        self.DEBUG = [sSucc,sTime]
         #would you like to update success ans time success?
     
 #######################-----Adi changes(17/12/2012)-----####################

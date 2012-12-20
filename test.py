@@ -216,7 +216,8 @@ def test7():
     
     #iterate over firstChild children: 
     firstChildList = firstChild.getChildren()
-    firstChild.run(0)
+    for i in range(5):
+        firstChild.run(0)
     count = 0
     for childNode in firstChildList:
         count += 1
@@ -261,7 +262,7 @@ def test8():
    dist.setValueToTime(0.1,1)
    dist.setValueToTime(0.1, dist.getCountByTime(0.1)+1 )
    dist.setValueToTime(0.2,1)   
-   dist.setValueToTime(0.05,1)   
+   dist.setValueToTime(0.05,1)
    if (dist.getCountByTime(0.1) == 2 and dist.getCountByTime(0.2) == 1 and dist.getCountByTime(0.05) == 1):
        print ("test 8.2: success!")
    else:
@@ -305,7 +306,51 @@ def test9():
        
        
 def test10():
-    pass
+   tree = xmlTree("test3.xml")
+   root = tree.getRoot()
+   
+   #this child is type- tsk
+   child = root.getChild(0)
+   
+   ### create a new dist - and 
+   dist_succ = _createNormalDist(5,2)
+   dist_fail = _createNormalDist(4,1) 
+   dist_fail1 = _createUniformDist(5, 8)   
+   #add to succ table
+   child.addDistToSuccTable(dist_succ)
+   #add to fail table/
+   child.addDistToFailTable(dist_fail)
+   #get distribute from the node by it's index (p1,p2,p3..)
+   dist_get_succ = child.getSuccDistAtIndex(0)
+   dist_get_fail = child.getFailDistAtIndex(0)
+   #check that it has the same parms 
+   #added by RAZ -- Adi, I made the tests a bit more complex, you should always have the tests as hard a possible, checking all possible cases.   
+   if (dist_get_succ != None and dist_get_succ.parmM == float(5) and dist_get_succ.parmG == float(2) and dist_get_fail != None and dist_get_fail.parmM == float(4) and dist_get_fail.parmG == float(1)):
+       print ("test 10.1: success!")
+
+   else:
+        ("test 10.1: failed :-(")
+        
+    # try to create computed dist.
+   #added by RAZ -- Adi, I made the tests a bit more complex, you should always have the tests as hard a possible, checking all possible cases.
+   dist = _createComputedDist()
+   dist.setValueToTime(0.1,1)
+   dist.setValueToTime(0.1, dist.getCountByTime(0.1)+1 )
+   dist.setValueToTime(0.2,1)   
+   dist.setValueToTime(0.05,1)
+   dist.printMe()
+   print dist.calcProb()
+   print "-----------"
+   dist_succ.printMe()
+   print dist_succ.calcProb()
+   dist_fail1.printMe()
+   print dist_fail1.calcProb()
+   if (dist.getCountByTime(0.1) == 2 and dist.getCountByTime(0.2) == 1 and dist.getCountByTime(0.05) == 1):
+       print ("test 10.2: success!")
+   else:
+        ("test 10.2: failed :-( - check computed dist")
+        
+        
 
 
 #changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.#thanks
@@ -331,7 +376,7 @@ if __name__ == "__main__":
 #    test4()
 #    test5()
 #    test6()
-#    test7()
+    test7()
 #    test8()
-     test9()
-#    test10()
+#    test9()
+    test10()

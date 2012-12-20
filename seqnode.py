@@ -21,7 +21,8 @@ class SeqNode (node):
             self.setTime(a[1])
             if not b[0]:	  
                 break
-        	#i.printChildren()
+        if (self.getNot()):
+            a[0] = not(a[0])
         self.setProbTableAtIndex(tmpIndex, a[0]) 
         return a    
         

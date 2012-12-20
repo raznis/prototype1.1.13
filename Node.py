@@ -4,6 +4,7 @@
 @author: polak
 """
 import random
+import math
 import re
 from lxml import etree
 
@@ -13,7 +14,7 @@ class node:
     #global variable - represents the amount of different parmeters of the world.
     #it is a class attribute and can accessed via class node.parameterInTheWorld
     #can be set from everywhere that import node
-    parmetersInTheWorld = 0
+    parmetersInTheWorld = 1
     
     #constractur- treeInstance-node in the etree, the etree itself, and prep-type(seq,plan etc.)
     def __init__(self,treeInstance = None,mytree = None,prep="plan",parent=None):
@@ -29,6 +30,7 @@ class node:
             self.treeInst = treeInstance
         self.succ = False
         self.time = 0
+        self.isNot = False
         self.parent = parent 
         #node monitor property
         self.monitor = True
@@ -42,14 +44,15 @@ class node:
         #update probability table
         probString = self.getAttrib("probability")
         if probString !=None:
-            self.probTable = self._parseString(probString)
+            self.probTable= self._parseString(probString)
         else:
             self.probTable= None
         
         #node debuge child property
         self.DEBUGchild= False   
         self._updateChildDebug()
-        self.DEBUG = False
+        self.DEBUG = None
+     
         #node not property
         self._updateNot()
             
@@ -229,7 +232,7 @@ class node:
         return self.DEBUGchild
         
             
-    def DEBUGnode(self,sSUCC=None,sTime=None):
+    def DEBUGnode(self,sSucc=None,sTime=None):
         self.DEBUG = True
         
         
@@ -254,11 +257,21 @@ class node:
                 self.isNot = False
                 
     #return true or false is this node is not
-    def isNot(self):
+    def getNot(self):
         return self.isNot
         
-    def isDEBUG(self):
+    #debug getter
+    def getDebug(self):
         return self.DEBUG
+        
+        
+    #check debug attribute - [True/False , time]   
+    def _readDebugFromAttrib(self):
+        ans = self.getAttrib("DEBUG")       
+        if ans!=None :
+            self.DEBUG = self._parseString(ans)            
+        else:
+            self.DEBUG = None
         
 #######################-----Liat changes-----###############################
 
@@ -315,7 +328,7 @@ class node:
         if (self.probTable==None):
             a = []
             #rang have to be the num of 2^param - need from Adi 
-            for i in range(2):
+            for i in range(int(math.pow(2,node.parmetersInTheWorld))):
                 a.append([0,0])
             self.setProbTable(a)
         if val:
@@ -337,7 +350,11 @@ class node:
         return None
      
     def run(self, index):
-        print "liat"
-        if (self.DEBUGnode()):
-            return [True, 1]
-        #raise NotImplementedError("Subclasses should implement this!")   
+        #print "liat"
+        return self.getDebug()
+        #for testing
+        #return [True,1]
+        #raise NotImplementedError("Subclasses should implement this!")  
+        
+        
+        

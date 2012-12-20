@@ -3,7 +3,7 @@
 
 @author: polak
 """
-
+import random
 from distribution import Distribution
 
 class Uniform(Distribution):
@@ -15,8 +15,12 @@ class Uniform(Distribution):
         
         
     def calcProb(self):
-        raise NotImplementedError("calcProb- uniform") 
+        return random.uniform(self.parmA, self.parmB)
     
     #for debaug     
     def whoAmI(self):
         return "Uniform"
+        
+        
+    def printMe (self):
+        print self.parmA ,self.parmB       

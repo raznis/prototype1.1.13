@@ -3,6 +3,7 @@
 
 @author: polak
 """
+import random
 from distribution import Distribution
 
 class Computed(Distribution):
@@ -14,8 +15,20 @@ class Computed(Distribution):
         
        
     def calcProb(self):
-        raise NotImplementedError("calcProb- computed")
-     
+        x = random.random()
+        return self.distNormalize(x)
+    
+    
+    def distNormalize(self, x):
+        s = 0.0
+        a = 0
+        for i in self.map.values():
+            s=s+i
+        for i in self.map:
+            a = a + self.map.get(i)/s
+            if (a >= x):
+                return i
+            
     #search for the time key in the dictionary- return 0  or count.- value
     def getCountByTime(self,time):
         ans = self.map.get(str(time))        
@@ -38,3 +51,8 @@ class Computed(Distribution):
    #for debaug     
     def whoAmI(self):
         return "Computed"
+        
+    def printMe (self):
+        for i in self.map:
+            print i, self.map.get(i)
+        

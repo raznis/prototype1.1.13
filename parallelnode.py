@@ -11,8 +11,14 @@ class ParallelNode (node):
         node.__init__(self,treeInst,mytree,"parallel",parent)
     
     def run(self, index):
-        node.run(self, index)
-        a = [False, 0]
+        tmpIndex = index
+        
+        b = node.run(self, index)
+        if (b!=None):
+            self.setProbTableAtIndex(tmpIndex, b[0]) 
+            return b           
+            
+        a = [False, 0]       
         for i in self.getChildren():
             b = i.run(index)
             if (a[0]):
@@ -26,4 +32,9 @@ class ParallelNode (node):
             a[0] = b[0] or a[0]
         self.setSucc(a[0])
         self.setTime(a[1])
+        
+        if (self.getNot()):
+            a[0] = not(a[0])
+        
+        self.setProbTableAtIndex(tmpIndex, a[0]) 
         return a
