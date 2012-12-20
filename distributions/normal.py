@@ -22,4 +22,7 @@ class Normal(Distribution):
         return "Normal"
         
     def printMe (self):
-        print self.parmM ,self.parmG    
+        print self.parmM ,self.parmG 
+        
+    def toString(self):
+        return str("N"+"["+str(self.parmM)+","+str(self.parmG)+"]")    

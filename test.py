@@ -176,6 +176,8 @@ def test7():
         print ("error creating seq node")
         print("test 7: failed :-(")
         return None
+    dist_succ = _createUniformDist(2,5)
+    dist_fail = _createUniformDist(6,10)   
     
     
     for j in range(3): 
@@ -199,6 +201,12 @@ def test7():
                           tempN2.setTime(0)
                           tempN2.setSucc(False)
                           tempN2.setProbTable([0.8, 0.5])
+                          for i in range(2):
+                              tempN2.addDistToSuccTable(dist_succ)
+                              tempN2.addDistToFailTable(dist_fail)
+                          tempN2.setAttrib("Successdistribution",tempN2.distTableSucc)
+                          tempN2.setAttrib("Failuredistribution",tempN2.distTableFail)    
+                              
           else:
               tempN1 = tempN.addNode("tsk")
               if tempN1 == None:
@@ -209,6 +217,12 @@ def test7():
                   tempN1.setTime(0)
                   tempN1.setSucc(False)
                   tempN1.setProbTable([0.7, 0.5])
+                  for i in range(2):
+                      tempN1.addDistToSuccTable(dist_succ)
+                      tempN1.addDistToFailTable(dist_fail)
+                      
+                  tempN1.setAttrib("Successdistribution",tempN1.distTableSucc)
+                  tempN1.setAttrib("Failuredistribution",tempN1.distTableFail) 
              
 	    
         

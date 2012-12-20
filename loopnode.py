@@ -11,22 +11,35 @@ class LoopNode (node):
         node.__init__(self,treeInst,mytree,"loop",parent)
     
     def run (self, index):
+        tmpIndex = index
+        
+        debug = node.run(self, index)
+        if (debug!=None):
+            self.setProbTableAtIndex(tmpIndex, debug[0]) 
+            return debug 
+            
         a = [True, 0]
-        c=0
-#        if (self.getChildren() == []):
-#            a[1]= self.getRandomProb(index)
-#            a[0] = self.getTime()
-#        else:
+        #c=0        
         child = self.getChildren()
-        while a[0] and c <=10:
+        while a[0]: #and c <=10:
             b = child[0].run(index)
             a[0] = a[0] and b[0]
-            self.setSucc(a[0])
+            #self.setSucc(a[0])
             a[1] = a[1] + b[1]
-            self.setTime(a[1])
-            c = c+1
-            print c
+            #self.setTime(a[1])
+#            c = c+1
+#            print c
             if not b[0]:	  
                 break
-        	#i.printChildren()
+            
+        if (self.getNot()):
+            a[0] = not(a[0])
+        
+        if a[0]:
+            self.setDistTableSuccAtIndex(tmpIndex, a[1])
+        else:
+            self.setDistTableFailAtIndex(tmpIndex, a[1])    
+        self.setProbTableAtIndex(tmpIndex, a[0]) 
+        
+        self.setProbTableAtIndex(tmpIndex, a[0]) 
         return a    

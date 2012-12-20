@@ -39,8 +39,7 @@ class Computed(Distribution):
     #Changed by RAZ - removed casting value to str    
     def setValueToTime(self,time,value):
         if (self.map.get(str(time)) != None):
-            self.map[str(time)]=value
-            
+            self.map[str(time)]=value           
         else:
             self.map.setdefault(str(time) , value)
      
@@ -53,6 +52,17 @@ class Computed(Distribution):
         return "Computed"
         
     def printMe (self):
-        for i in self.map:
-            print i, self.map.get(i)
+        if len(self.map) == 0:
+            print "[]"
+        else:
+            for i in self.map:
+                print i, self.map.get(i)
+                
+                
+    def toString(self):
+        string ="C["
+        for index in self.map:
+            string+= str("["+str(index)+","+str(self.map.get(index))+"]")
+        string+="]"
+        return string           
         

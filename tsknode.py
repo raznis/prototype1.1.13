@@ -5,6 +5,10 @@
 """
 
 from Node import node
+from distributions.computed import Computed
+from distributions.normal import Normal
+from distributions.uniform import Uniform
+
 
 class TskNode (node):
     def __init__(self,treeInst,mytree,parent):
@@ -21,21 +25,19 @@ class TskNode (node):
         
     def run (self, index):
 
-        b = node.run(self, index)
-        if (b!=None):
-            return b  
+        debug = node.run(self, index)
+        if (debug!=None):
+            return debug  
             
         a = [True, 0]        
         a[0]= self.getRandomProb(index)
-        a[1] = self.getTime()
-        # this information should be calculated as part of the tree
-#        if a[0]:
-#            a[2] = self.getProbAtIndex(index)
-#        else:
-#            a[2] = self.getProbAtIndex(index)
-        #print a
         if (self.getNot()):
-            a[0] = not(a[0])
+            a[0] = not(a[0])        
+        if a[0]:
+            a[1] = round(self.getDistSuccByIndex(index).calcProb(), 1)
+        else:
+            a[1] = round(self.getDistFailByIndex(index).calcProb(), 1) 
+        #print "Task:[%r %f]" %(a[0] ,a[1])    
         return a
         
     #override the node func- tsk dosn't have children   

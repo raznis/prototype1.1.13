@@ -13,10 +13,9 @@ class ParallelNode (node):
     def run(self, index):
         tmpIndex = index
         
-        b = node.run(self, index)
-        if (b!=None):
-            self.setProbTableAtIndex(tmpIndex, b[0]) 
-            return b           
+        debug = node.run(self, index)
+        if (debug!=None):
+            return debug           
             
         a = [False, 0]       
         for i in self.getChildren():
@@ -30,11 +29,12 @@ class ParallelNode (node):
                 else:
                     a[1] = (max(b[1], a[1]))
             a[0] = b[0] or a[0]
-        self.setSucc(a[0])
-        self.setTime(a[1])
-        
+            
         if (self.getNot()):
             a[0] = not(a[0])
-        
-        self.setProbTableAtIndex(tmpIndex, a[0]) 
+        if a[0]:
+            self.setDistTableSuccAtIndex(tmpIndex, a[1])
+        else:
+            self.setDistTableFailAtIndex(tmpIndex, a[1])          
+        self.setProbTableAtIndex(tmpIndex, a[0])
         return a

@@ -24,3 +24,7 @@ class Uniform(Distribution):
         
     def printMe (self):
         print self.parmA ,self.parmB       
+        
+        
+    def toString(self):
+        return str("U"+"["+str(self.parmA)+","+str(self.parmB)+"]")    

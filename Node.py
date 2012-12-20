@@ -7,7 +7,7 @@ import random
 import math
 import re
 from lxml import etree
-
+from distributions.computed import Computed
 
 class node:
     
@@ -207,8 +207,8 @@ class node:
     def comparTo(self,nodeToCompare):
         return id(self)==id(nodeToCompare)
         
-    def __getitem__(self):
-        return self
+#    def __getitem__(self):
+#        return self
         
       
 #######################-----Adi changes(17/12/2012)-----####################
@@ -272,21 +272,27 @@ class node:
             self.DEBUG = self._parseString(ans)            
         else:
             self.DEBUG = None
+            
+            
+    def _distTableToString(self,table):
+        string =""
+        for index in range(0,len(table)) :
+            string += ((table[index]).toString())
+            if index < (len(table)-1):
+                string+=" "
+        return (string)        
         
 #######################-----Liat changes-----###############################
 
 
 
     def getRandomProb(self, index):
-        succprob = []
         x = random.random()
         #print x, self.getProbAtIndex(index)
         if (x <= self.getProbAtIndex(index)):
             self.setSucc(True)
-            succprop = [True,self.getProbAtIndex(index)]
         else:
             self.setSucc(False)
-            succprop = [False, (1-self.getProbAtIndex(index))]        
         return self.getSucc()
         
         
@@ -297,6 +303,15 @@ class node:
     def setProbTable(self, probtable):
         self.probTable = probtable
         self.setAttrib("probability",probtable)
+        
+        
+    def setDistTableSucc(self, distTable):
+        self.distTableSucc = distTable
+        self.setAttrib("Successdistribution",self._distTableToString(self.distTableSucc))
+        
+    def setDistTableFail(self, distTable):
+        self.distTableFail = distTable
+        self.setAttrib("Failuredistribution",self._distTableToString(self.distTableFail))    
       
     #getter-time
     def getTime(self):
@@ -327,7 +342,6 @@ class node:
     def setProbTableAtIndex(self, index, val):
         if (self.probTable==None):
             a = []
-            #rang have to be the num of 2^param - need from Adi 
             for i in range(int(math.pow(2,node.parmetersInTheWorld))):
                 a.append([0,0])
             self.setProbTable(a)
@@ -338,6 +352,34 @@ class node:
         else:
             self.probTable[index][1] = self.probTable[index][1]+1
             self.setAttrib("probability",self.probTable)
+            
+            
+            
+            
+            
+    def setDistTableSuccAtIndex(self, index, time):
+        if (self.distTableSucc==[]):
+            a = []
+            for i in range(int(math.pow(2,node.parmetersInTheWorld))):
+                dist = Computed({})
+                a.append(dist)
+            self.setDistTableSucc(a)
+        self.distTableSucc[index].setValueToTime(time, self.distTableSucc[index].getCountByTime(time)+1)
+        self.setAttrib("Successdistribution",self._distTableToString(self.distTableSucc))
+        #self.distTableSucc[index].printMe()
+            
+    
+    def setDistTableFailAtIndex(self, index, time):
+        if (self.distTableFail==[]):
+            a = []          
+            for i in range(int(math.pow(2,node.parmetersInTheWorld))):
+                dist = Computed({})
+                a.append(dist)
+            self.setDistTableFail(a)   
+        self.distTableFail[index].setValueToTime(time, self.distTableFail[index].getCountByTime(time)+1)
+        self.setAttrib("Failuredistribution",self._distTableToString(self.distTableFail))
+        #self.distTableFail[index].printMe()
+        
    
 
     #getter for probIndex
@@ -350,11 +392,18 @@ class node:
         return None
      
     def run(self, index):
-        #print "liat"
-        return self.getDebug()
-        #for testing
-        #return [True,1]
-        #raise NotImplementedError("Subclasses should implement this!")  
-        
-        
+        tmpIndex  = index
+        a = self.getDebug()
+        if (a!=None):
+            if (self.getNot()):
+                a[0] = not(a[0])
+            if not(self.boolWhoAmI("tsk")):        
+                if a[0]:
+                    self.setDistTableSuccAtIndex(tmpIndex, a[1])
+                else:
+                    self.setDistTableFailAtIndex(tmpIndex, a[1])          
+                self.setProbTableAtIndex(tmpIndex, a[0])
+        return a
+    
+
         
