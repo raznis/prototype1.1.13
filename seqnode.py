@@ -37,11 +37,13 @@ class SeqNode (node):
             
         if (self.getNot()):
             a[0] = not(a[0])
-        if a[0]:
-            self.setDistTableSuccAtIndex(tmpIndex, a[1])
-        else:
-            self.setDistTableFailAtIndex(tmpIndex, a[1])    
-        self.setProbTableAtIndex(tmpIndex, a[0])
+            
+        if (self.monitor):    
+            if a[0]:
+                self.setDistTableSuccAtIndex(tmpIndex, a[1])
+            else:
+                self.setDistTableFailAtIndex(tmpIndex, a[1])    
+            self.setProbTableAtIndex(tmpIndex, a[0])
         return a    
         
         
