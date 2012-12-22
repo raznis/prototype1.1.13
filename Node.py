@@ -15,6 +15,7 @@ class node:
     #it is a class attribute and can accessed via class node.parameterInTheWorld
     #can be set from everywhere that import node
     parmetersInTheWorld = 1
+    debugMode = False
     
     #constractur- treeInstance-node in the etree, the etree itself, and prep-type(seq,plan etc.)
     def __init__(self,treeInstance = None,mytree = None,prep="plan",parent=None):
@@ -28,8 +29,8 @@ class node:
         else:
             self.myTree = mytree
             self.treeInst = treeInstance
-        self.succ = False
-        self.time = 0
+#        self.succ = False
+#        self.time = 0
         self.isNot = False
         self.parent = parent 
         #node monitor property
@@ -55,6 +56,7 @@ class node:
      
         #node not property
         self._updateNot()
+        self.reset = False
             
         
         
@@ -231,7 +233,7 @@ class node:
     def isChildDebug(self):
         return self.DEBUGchild
         
-            
+    #dont know when we use this func        
     def DEBUGnode(self,sSucc=None,sTime=None):
         self.DEBUG = True
         
@@ -289,12 +291,7 @@ class node:
     def getRandomProb(self, index):
         x = random.random()
         #print x, self.getProbAtIndex(index)
-        if (x <= self.getProbAtIndex(index)):
-            self.setSucc(True)
-        else:
-            self.setSucc(False)
-        return self.getSucc()
-        
+        return (x <= self.getProbAtIndex(index))
         
     def getTimeByDist(self, index):
         pass
@@ -308,39 +305,40 @@ class node:
     def setDistTableSucc(self, distTable):
         self.distTableSucc = distTable
         self.setAttrib("Successdistribution",self._distTableToString(self.distTableSucc))
-        
+           
     def setDistTableFail(self, distTable):
         self.distTableFail = distTable
         self.setAttrib("Failuredistribution",self._distTableToString(self.distTableFail))    
       
-    #getter-time
-    def getTime(self):
-        if (self.getSucc()):
-            #self.setTime(random.random())
-            self.setTime(1)
-        else:
-            self.setTime(2)             
-        return self.time
-    
-    #setter time
-    def setTime(self,time):
-        self.time = time
-        self.setAttrib("time",time)   
-        
-        
-    def getSucc(self):
-        return (self.succ == True)
-        
-    def setSucc(self, setbool):
-        if setbool == True:
-             self.succ = True
-        else :
-             self.succ = False
-        self.setAttrib("succ",self.succ)
+#    #getter-time
+#    def getTime(self):
+#        if (self.getSucc()):
+#            #self.setTime(random.random())
+#            self.setTime(1)
+#        else:
+#            self.setTime(2)             
+#        return self.time
+#    
+#    #setter time
+#    def setTime(self,time):
+#        self.time = time
+#        self.setAttrib("time",time)   
+#        
+#        
+#    def getSucc(self):
+#        return (self.succ == True)
+#        
+#    def setSucc(self, setbool):
+#        if setbool == True:
+#             self.succ = True
+#        else :
+#             self.succ = False
+#        self.setAttrib("succ",self.succ)
         
         
     def setProbTableAtIndex(self, index, val):
-        if (self.probTable==None):
+        if (self.probTable==None or len(self.probTable)==0 ):
+#            print "liat"
             a = []
             for i in range(int(math.pow(2,node.parmetersInTheWorld))):
                 a.append([0,0])
@@ -392,18 +390,64 @@ class node:
         return None
      
     def run(self, index):
-        tmpIndex  = index
-        a = self.getDebug()
-        if (a!=None):
-            if (self.getNot()):
-                a[0] = not(a[0])
-            if not(self.boolWhoAmI("tsk")):        
-                if a[0]:
-                    self.setDistTableSuccAtIndex(tmpIndex, a[1])
-                else:
-                    self.setDistTableFailAtIndex(tmpIndex, a[1])          
-                self.setProbTableAtIndex(tmpIndex, a[0])
+        a = None
+        if (node.debugMode):
+            tmpIndex  = index
+            a = self.getDebug()
+            if (a!=None):
+                if (self.getNot()):
+                    a[0] = not(a[0])
+                if not(self.boolWhoAmI("tsk")):        
+                    if a[0]:
+                        self.setDistTableSuccAtIndex(tmpIndex, a[1])
+                    else:
+                        self.setDistTableFailAtIndex(tmpIndex, a[1])          
+                    self.setProbTableAtIndex(tmpIndex, a[0])
         return a
     
 
+   
+    def setDebug(self, succ, time):
+        self.DEBUG = [succ, time]     
+        self.setAttrib("DEBUG", self.DEBUG )
         
+    
+    def runAsBaseCase (self, index):
+        debug = node.run(self, index)
+        if (debug!=None):
+            return debug  
+            
+        a = [True, 0]        
+        a[0]= self.getRandomProb(index)
+        if (self.getNot()):
+            a[0] = not(a[0])        
+        if a[0]:
+            a[1] = self.getDistSuccByIndex(index).calcProb()
+        else:
+            a[1] = self.getDistFailByIndex(index).calcProb()
+        #print "Task:[%r %f]" %(a[0] ,a[1])    
+        return a
+        
+###copy from task
+        
+    def getDistSuccByIndex(self,index):
+        if len(self.distTableSucc) > index:
+            return self.distTableSucc[index]
+        return None
+        
+
+
+    def getDistFailByIndex(self,index):
+        if len(self.distTableFail) > index:
+            return self.distTableFail[index]
+        return None 
+        
+        
+    def clear (self):
+       self.probTable = []
+       self.distTableSucc = []
+       self.distTableFail = [] 
+       self.setAttrib("Successdistribution",[])
+       self.setAttrib("probability",[])
+       self.setAttrib("Failuredistribution",[])  
+       self.reset = True

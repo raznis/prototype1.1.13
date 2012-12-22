@@ -13,6 +13,14 @@ class LoopNode (node):
     def run (self, index):
         tmpIndex = index
         
+        if (node.debugMode):
+            if not(self.isChildDebug()):
+                return self.runAsBaseCase(index)    
+            else:
+                if not(self.reset):
+                    self.clear()        
+        
+        
         debug = node.run(self, index)
         if (debug!=None):
             self.setProbTableAtIndex(tmpIndex, debug[0]) 
@@ -41,5 +49,4 @@ class LoopNode (node):
             self.setDistTableFailAtIndex(tmpIndex, a[1])    
         self.setProbTableAtIndex(tmpIndex, a[0]) 
         
-        self.setProbTableAtIndex(tmpIndex, a[0]) 
         return a    

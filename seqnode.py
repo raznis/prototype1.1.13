@@ -11,7 +11,14 @@ class SeqNode (node):
         node.__init__(self,treeInst,mytree,"seq",parent)
     
     def run (self, index):      
-        tmpIndex = index        
+        tmpIndex = index 
+        
+        if (node.debugMode):
+            if not(self.isChildDebug()):
+                return self.runAsBaseCase(index)
+            else:
+                if not(self.reset):
+                    self.clear()
         
         debug = node.run(self, index)
         if (debug!=None):
@@ -36,4 +43,6 @@ class SeqNode (node):
             self.setDistTableFailAtIndex(tmpIndex, a[1])    
         self.setProbTableAtIndex(tmpIndex, a[0])
         return a    
+        
+        
         

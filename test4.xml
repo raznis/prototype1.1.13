@@ -1,30 +1,26 @@
 <plan>
-  <parallel Failuredistribution="C[[21.9,1][20.5,1][23.9,1]] C[]" probability="[[2, 5], [0, 0]]" Successdistribution="C[[19.8,1][17.4,1]] C[]">
-    <seq Failuredistribution="C[[9.4,1][21.9,1][19.2,1][23.9,1]] C[]" probability="[[1, 5], [0, 0]]" Successdistribution="C[[17.4,1]] C[]">
-      <tsk time="0" succ="False" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
-      <tsk time="0" succ="False" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
+  <parallel Successdistribution="C[[13.7,1][3.8,1]] C[]" probability="[[2, 5], [0, 0]]" Failuredistribution="C[[40.0,1][40.7,1][44.9,1]] C[]">
+    <seq Failuredistribution="C[[9.4,1][7.6,1][13.2,1][9.1,1][13.3,1]] C[]" probability="[[0, 5], [0, 0]]">
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
     </seq>
-    <seq Failuredistribution="C[[10.8,1][13.5,1][12.7,1][10.0,1]] C[]" probability="[[1, 5], [0, 0]]" Successdistribution="C[[26.9,1]] C[]">
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
-      <seq Failuredistribution="C[[6.5,1]] C[]" probability="[[1, 2], [0, 0]]" Successdistribution="C[[12.0,1]] C[]">
-        <tsk time="0" succ="True" probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]"/>
-        <tsk time="0" succ="True" probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]"/>
-        <tsk time="0" succ="True" probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]"/>
-        <tsk time="0" succ="True" probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]"/>
+    <select Successdistribution="C[[13.7,1][3.8,1]] C[]" probability="[[2, 5], [0, 0]]" Failuredistribution="C[[40.0,1][40.7,1][44.9,1]] C[]">
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,10.0]"/>
+      <seq Failuredistribution="C[[16.5,1][8.2,1][11.8,1]] C[]" probability="[[0, 3], [0, 0]]">
+        <tsk probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]" DEBUG="[True, 100]"/>
+        <tsk probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]" DEBUG="[True, 100]"/>
+        <tsk probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]" DEBUG="[True, 100]"/>
+        <tsk probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]" DEBUG="[True, 100]"/>
       </seq>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
-    </seq>
-    <seq Failuredistribution="C[[13.4,1][8.2,1][20.5,1][6.8,1]] C[]" probability="[[1, 5], [0, 0]]" Successdistribution="C[[19.8,1]] C[]">
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
-      <tsk time="0" succ="True" probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
-    </seq>
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
+    </select>
+    <loop Failuredistribution="C[[8.0,1][23.4,1][6.9,1][9.2,1][8.6,1]] C[]" probability="[[0, 5], [0, 0]]">
+      <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,9.0] U[6.0,9.0]"/>
+    </loop>
   </parallel>
 </plan>

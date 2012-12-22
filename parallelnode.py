@@ -13,6 +13,13 @@ class ParallelNode (node):
     def run(self, index):
         tmpIndex = index
         
+        if (node.debugMode):
+            if not(self.isChildDebug()):
+                return self.runAsBaseCase(index)    
+            else:
+                if not(self.reset):
+                    self.clear()
+        
         debug = node.run(self, index)
         if (debug!=None):
             return debug           
