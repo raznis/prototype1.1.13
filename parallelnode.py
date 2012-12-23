@@ -12,7 +12,7 @@ class ParallelNode (node):
     
     def run(self, index):
         tmpIndex = index
-        
+       
         if (node.debugMode):
             if not(self.isChildDebug()):
                 return self.runAsBaseCase(index)    
@@ -23,7 +23,7 @@ class ParallelNode (node):
         debug = node.run(self, index)
         if (debug!=None):
             return debug           
-            
+        
         a = [False, 0]       
         for i in self.getChildren():
             b = i.run(index)

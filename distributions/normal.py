@@ -15,7 +15,7 @@ class Normal(Distribution):
         
         
     def calcProb(self):
-        return random.normalvariate(self.parmM, self.parmG)
+        return random.normalvariate(float(self.parmM), float(self.parmG))
     
     #for debaug     
     def whoAmI(self):

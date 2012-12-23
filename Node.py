@@ -278,7 +278,10 @@ class node:
             
     def _distTableToString(self,table):
         string =""
+        i=0
         for index in range(0,len(table)) :
+#            print i
+            i=i+1
             string += ((table[index]).toString())
             if index < (len(table)-1):
                 string+=" "
@@ -291,7 +294,7 @@ class node:
     def getRandomProb(self, index):
         x = random.random()
         #print x, self.getProbAtIndex(index)
-        return (x <= self.getProbAtIndex(index))
+        return (x <= float(self.getProbAtIndex(index)))
         
     def getTimeByDist(self, index):
         pass
@@ -452,3 +455,8 @@ class node:
        self.setAttrib("probability",[])
        self.setAttrib("Failuredistribution",[])  
        self.reset = True
+       
+       
+    def runPlan(self, index):
+      children = self.getChildren()
+      children[0].run(index)    

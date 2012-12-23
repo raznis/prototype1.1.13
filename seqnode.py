@@ -22,7 +22,6 @@ class SeqNode (node):
         
         debug = node.run(self, index)
         if (debug!=None):
-            self.setProbTableAtIndex(tmpIndex, debug[0]) 
             return debug             
         
         a = [True, 0]        

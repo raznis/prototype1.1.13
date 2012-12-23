@@ -1,6 +1,6 @@
 <plan>
-  <seq Failuredistribution="C[[4.5,1][3.2,1][4.7,1][4.1,1][2.5,1]] C[]" probability="[[0, 5], [0, 0]]">
-    <parallel Successdistribution="C[[4.5,1][3.2,1][4.7,1][4.1,1][2.5,1]] C[]" probability="[[5, 5], [0, 0]]">
+  <seq Failuredistribution="C[[3.7,1][3.4,1][4.6,1][4.1,1]] C[]" probability="[[1, 5], [0, 0]]" Successdistribution="C[[7.4,1]] C[]">
+    <parallel Successdistribution="C[[3.7,1][3.4,1][4.6,1][4.1,1]] C[]" probability="[[4, 5], [0, 0]]" Failuredistribution="C[[7.4,1]] C[]">
       <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]" DEBUG="[True, 100]"/>
       <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]" DEBUG="[True, 100]"/>
       <tsk probability="[0.3, 0.5]" Successdistribution="U[2.0,5.0] U[2.0,5.0]" Failuredistribution="U[6.0,10.0] U[6.0,9.0]" DEBUG="[True, 100]"/>

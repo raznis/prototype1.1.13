@@ -12,7 +12,7 @@ class SelectNode (node):
     
     def run (self, index):       
         tmpIndex = index
-
+        
         if (node.debugMode):
             if not(self.isChildDebug()):
                 return self.runAsBaseCase(index)    
@@ -22,9 +22,8 @@ class SelectNode (node):
 
         debug = node.run(self, index)
         if (debug!=None):
-            self.setProbTableAtIndex(tmpIndex, debug[0]) 
             return debug          
-        
+       
         a = [False, 0]
         for i in self.getChildren():                        
             b = i.run(index)           

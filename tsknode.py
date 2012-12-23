@@ -36,7 +36,7 @@ class TskNode (node):
         if a[0]:
             a[1] = round(self.getDistSuccByIndex(index).calcProb(), 1)
         else:
-            a[1] = round(self.getDistFailByIndex(index).calcProb(), 1) 
+            a[1] = round(self.getDistFailByIndex(index).calcProb(), 1)   
         #print "Task:[%r %f]" %(a[0] ,a[1])    
         return a
         

@@ -61,8 +61,12 @@ class Computed(Distribution):
                 
     def toString(self):
         string ="C["
+        i=0
         for index in self.map:
+            #print i
+            i=i+1
             string+= str("["+str(index)+","+str(self.map.get(index))+"]")
+            #print string
         string+="]"
         return string           
         

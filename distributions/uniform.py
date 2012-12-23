@@ -15,7 +15,7 @@ class Uniform(Distribution):
         
         
     def calcProb(self):
-        return random.uniform(self.parmA, self.parmB)
+        return random.uniform(float(self.parmA), float(self.parmB))
     
     #for debaug     
     def whoAmI(self):
