@@ -367,8 +367,22 @@ def test10():
 def test11():
     #in AdiEvent2- I removed x,y and id attribue. so we can see easily the decorator not,loop (L!)
     tree = xmlTree("AdiEvent2.xml")
-    tree.treeToXml("test11.xml")
-    print("test 11:success- check test11.xml file")     
+    root= tree.getRoot()
+    seqChild = root.getChild(0)
+    if seqChild == None:
+        print("test 11: failed :-( ")
+    else:
+        #check debug reading from the file
+        #seqChild. getDEBUGtime() = 5
+        if seqChild.getDEBUGsucc() == True :#and seqChild.DEBUG[1] == 5 :
+            print("test 11.1: success")
+        else:
+            print ("test 11.1: failed :-( ")
+        seqChild.setDEBUGresult(True, 0.5)
+        if seqChild.getDEBUGsucc() == True :#and seqChild.DEBUG[1] == 5 :
+            print("test 11.2: success")
+        else:
+            print ("test 11.2: failed :-( ")            
 
 def test12():
     tree = xmlTree("event1.xml")
@@ -559,17 +573,17 @@ def _createUniformDist(parmA,parmB):
 
 if __name__ == "__main__":
     #run the 10 tests
-    test1()
-    test2()
-    test3()
-    test4()
-    test5()
-    test6()
-    test7()
-    test8()
-    test9()
-    test10()
+#    test1()
+#    test2()
+#    test3()
+#    test4()
+#    test5()
+#    test6()
+#    test7()
+#    test8()
+#    test9()
+#    test10()
     test11()
-    test12()
-    test14()
-    test15()
+#    test12()
+#    test14()
+#    test15()
