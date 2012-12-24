@@ -370,6 +370,10 @@ def test11():
     tree.treeToXml("test11.xml")
     print("test 11:success- check test11.xml file")     
 
+def test12():
+    tree = xmlTree("event1.xml")
+    tree.treeToXml("test12.xml")
+    print("test 12: success- check test12.xml file")      
 
 #changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.#thanks
 def _createComputedDist(string = None):
@@ -399,3 +403,4 @@ if __name__ == "__main__":
     test9()
     test10()
     test11()
+    test12()
