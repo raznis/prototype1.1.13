@@ -38,10 +38,10 @@ class Computed(Distribution):
     #search for the time key in the dictionary- and update it. or create it with value.   
     #Changed by RAZ - removed casting value to str    
     def setValueToTime(self,time,value):
-        if (self.map.get(str(time)) != None):
-            self.map[str(time)]=value           
+        if (self.map.get(float(time)) != None):
+            self.map[float(time)]=value           
         else:
-            self.map.setdefault(str(time) , value)
+            self.map.setdefault(float(time) , value)
      
        
     def stringToDictionary(self,string):

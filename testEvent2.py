@@ -1,12 +1,13 @@
 from tree import xmlTree
 from Node import node
-
+import time
 
 
 
 #provide a tree xml file      
 def test2():
-    tree = xmlTree("event2.xml")
+    start = time.time()
+    tree = xmlTree("event1.xml")
     root = tree.getRoot()
 
     root.treeToXml("testE21.xml")  
@@ -15,8 +16,17 @@ def test2():
     node.debugMode = False
     for i in range(100):
         root.runPlan(0)    
-    root.treeToXml("testE22.xml")    
-    
+    root.treeToXml("testE22.xml") 
+ 
+    elapsed = (time.time() - start)
+    print elapsed
+    print "phase 2"
+    node.debugMode = True
+    for i in range(100):
+        root.runPlan(0)    
+    root.treeToXml("testE23.xml") 
+    elapsed = (time.time() - start)
+    print elapsed
     
 
 #changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.#thanks

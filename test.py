@@ -375,6 +375,173 @@ def test12():
     tree.treeToXml("test12.xml")
     print("test 12: success- check test12.xml file")      
 
+
+
+def test14():
+    tree = node()
+    root = tree
+    #first child
+    firstChild = root.addNode("par")
+    if firstChild == None:
+        print ("error creating seq node")
+        print("test 7: failed :-(")
+        return None
+    dist_succ = _createUniformDist(2,5)
+    dist_fail = _createUniformDist(6,10)   
+    
+    firstChild.DEBUGchild = True 
+    for j in range(3): 
+      if j==0:  
+          tempN = firstChild.addNode("seq")
+          if tempN == None:
+              print ("error creating seq node")
+      if j==1:  
+          tempN = firstChild.addNode("sel")
+          if tempN == None:
+              print ("error creating seq node")
+      if j==2:  
+          tempN = firstChild.addNode("loop")
+          if tempN == None:
+              print ("error creating seq node")        
+      
+      for i in range(5):
+          if ((j==1) and (i==2)):
+              tempN1 = tempN.addNode("seq")
+              tempN.DEBUGchild = True
+              tempN1.DEBUGchild = True
+              if tempN1 == None:
+                  print ("error creating seq node")
+              else:                
+                  for i in range(4):
+                      tempN2 = tempN1.addNode("tsk")
+                      if tempN2 == None:
+                          print ("error creating seq node")
+                      else:
+                          tempN2.setProbTable([0.1, 0.5])
+                          for i in range(2):
+                              dist_fail = _createUniformDist(6,10-i)  
+                              tempN2.addDistToSuccTable(dist_succ)
+                              tempN2.addDistToFailTable(dist_fail)
+                          tempN2.setAttrib("Successdistribution",tempN2._distTableToString(tempN2.distTableSucc))
+                          tempN2.setAttrib("Failuredistribution",tempN2._distTableToString(tempN2.distTableFail))
+                          tempN2.setDebug(True, 100)
+                          tempN2.setAttrib("DEBUG", tempN2.DEBUG)
+                              
+          else:
+              tempN1 = tempN.addNode("tsk")
+              if tempN1 == None:
+                  print ("error creating seq node")
+              else:
+                  tempN1.setProbTable([0.3, 0.5])
+                  for i in range(2):
+                      tempN1.addDistToSuccTable(dist_succ)
+                      tempN1.addDistToFailTable(dist_fail)
+                      
+                  tempN1.setAttrib("Successdistribution",tempN1._distTableToString(tempN1.distTableSucc))
+                  tempN1.setAttrib("Failuredistribution",tempN1._distTableToString(tempN1.distTableFail))
+          if j==2:
+              break
+	    
+        
+
+    
+    #iterate over firstChild children: 
+
+    node.debugMode = False
+    for i in range(5):
+        firstChild.run(0)
+    root.treeToXml("test14a.xml") 
+    print("test 14.1: success! please check the file test14a.xml - every tag need to have the same attrib.")
+    print "phase 2"
+    node.debugMode = True
+    for i in range(5):
+        firstChild.run(0)
+    root.treeToXml("test14b.xml") 
+    print("test 14.2: success! please check the file test14b.xml - every tag need to have the same attrib.")
+        
+   
+     
+ #empty test - will be implemented- feeling creative? :-)    
+def test15():
+  
+    tree = node()
+    root = tree
+    #first child
+    firstChild = root.addNode("par")
+    if firstChild == None:
+        print ("error creating seq node")
+        print("test 7: failed :-(")
+        return None
+    dist_succ = _createUniformDist(2,5)
+    dist_fail = _createUniformDist(6,10)   
+    
+    firstChild.DEBUGchild = True 
+    for j in range(3): 
+      tempN = firstChild.addNode("seq")
+      if tempN == None:
+	  print ("error creating seq node")
+      
+      for i in range(5):
+          if ((j==1) and (i==2)):
+              tempN1 = tempN.addNode("seq")
+              tempN.DEBUGchild = True
+              tempN1.DEBUGchild = True
+              if tempN1 == None:
+                  print ("error creating seq node")
+              else:                
+                  for i in range(4):
+                      tempN2 = tempN1.addNode("tsk")
+                      if tempN2 == None:
+                          print ("error creating seq node")
+                      else:
+                          tempN2.setProbTable([0.8, 0.5])
+                          for i in range(2):
+                              dist_fail = _createUniformDist(6,10-i)  
+                              tempN2.addDistToSuccTable(dist_succ)
+                              tempN2.addDistToFailTable(dist_fail)
+                          tempN2.setAttrib("Successdistribution",tempN2._distTableToString(tempN2.distTableSucc))
+                          tempN2.setAttrib("Failuredistribution",tempN2._distTableToString(tempN2.distTableFail))
+                          tempN2.setDebug(True, 100)
+                          tempN2.setAttrib("DEBUG", tempN2.DEBUG)
+                              
+          else:
+              tempN1 = tempN.addNode("tsk")
+              if tempN1 == None:
+                  print ("error creating seq node")
+              else:
+                  tempN1.setProbTable([0.7, 0.5])
+                  for i in range(2):
+                      tempN1.addDistToSuccTable(dist_succ)
+                      tempN1.addDistToFailTable(dist_fail)
+                      
+                  tempN1.setAttrib("Successdistribution",tempN1._distTableToString(tempN1.distTableSucc))
+                  tempN1.setAttrib("Failuredistribution",tempN1._distTableToString(tempN1.distTableFail))
+             
+	    
+        
+
+    
+    #iterate over firstChild children: 
+
+    node.debugMode = False
+    for i in range(5):
+        firstChild.run(0)
+    root.treeToXml("test15a.xml") 
+    print("test 15.1: success! please check the file test15a.xml - every tag need to have the same attrib.")
+    node.debugMode = True
+    for i in range(5):
+        firstChild.run(0)
+    root.treeToXml("test13b.xml") 
+    print("test 15.2: success! please check the file test15b.xml - every tag need to have the same attrib.")
+        
+        
+    
+    #print the tree we built from scratch to xml file.
+    #please check the file- every tag need to have the same attrib.
+
+    
+            
+        
 #changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.#thanks
 def _createComputedDist(string = None):
     from distributions.computed import Computed
@@ -398,9 +565,11 @@ if __name__ == "__main__":
     test4()
     test5()
     test6()
-#    test7()
+    test7()
     test8()
     test9()
     test10()
     test11()
     test12()
+    test14()
+    test15()

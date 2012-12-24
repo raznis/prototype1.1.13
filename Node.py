@@ -228,7 +228,9 @@ class node:
 #    def __getitem__(self):
 #        return self
 #######################-----Adi changes(23/12/2012)-----####################  
-
+    
+        
+    
     #input - EtreeInst- element which it's tag is dec - decorator
     #output new node- loop/not with childen- example- for dec "!L!" crete not - loop - not      
     def _CreatDecoratorNodesFromName(self, element):
@@ -252,11 +254,20 @@ class node:
                                     newChild = self.addNode("not")
                 #after we create newChild we'll appand it all the other- by newChild.addNode func.
                 else:
-                    if char == "L" :
-                        lastChild = newChild.addNode("loop")
-                    if char == "!":
-                        lastChild = newChild.addNode("not")
-                        
+#                    if char == "L" :
+#                        lastChild = newChild.addNode("loop")
+#                    if char == "!":
+#                        lastChild = newChild.addNode("not")
+                    if lastChild == None:
+                            if char == "L" :
+                                lastChild = newChild.addNode("loop")
+                            if char == "!":
+                                lastChild = newChild.addNode("not")
+                    else:
+                            if char == "L" :
+                                lastChild = lastChild.addNode("loop")
+                            if char == "!":
+                                lastChild = lastChild.addNode("not")    
                         
         #if we succeded to create newChild and hid children we will give the last node all decorator attributes by deepcopy dec-treeInst                
         if lastChild !=None :
@@ -491,7 +502,7 @@ class node:
             self.probTable[index][1] = self.probTable[index][1]+1
             self.setAttrib("probability",self.probTable)
             
-            
+    
             
             
             
@@ -535,15 +546,16 @@ class node:
             tmpIndex  = index
             a = self.getDebug()
             if (a!=None):
-                if (self.getNot()):
-                    a[0] = not(a[0])
+#                if (self.getNot()):
+#                    a[0] = not(a[0])
+
                 if not(self.boolWhoAmI("tsk")): 
                     if (self.monitor):
                         if a[0]:
                             self.setDistTableSuccAtIndex(tmpIndex, a[1])
                         else:
                             self.setDistTableFailAtIndex(tmpIndex, a[1])          
-                        self.setProbTableAtIndex(tmpIndex, a[0])
+                        self.updateProbTableAtIndex(tmpIndex, a[0])               
         return a
     
 
@@ -560,13 +572,13 @@ class node:
             
         a = [True, 0]        
         a[0]= self.getRandomProb(index)
-        if (self.getNot()):
-            a[0] = not(a[0])        
+#        if (self.getNot()):
+#            a[0] = not(a[0])        
         if a[0]:
             a[1] = self.getDistSuccByIndex(index).calcProb()
         else:
             a[1] = self.getDistFailByIndex(index).calcProb()
-        #print "Task:[%r %f]" %(a[0] ,a[1])    
+
         return a
         
 ###copy from task

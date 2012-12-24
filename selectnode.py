@@ -14,7 +14,7 @@ class SelectNode (node):
         tmpIndex = index
         
         if (node.debugMode):
-            if not(self.isChildDebug()):
+            if not(self.hasDebugChild()):
                 return self.runAsBaseCase(index)    
             else:
                 if not(self.reset):
@@ -34,13 +34,13 @@ class SelectNode (node):
             if b[0]:	  
                 break
             
-        if (self.getNot()):
-            a[0] = not(a[0]) 
+#        if (self.getNot()):
+#            a[0] = not(a[0]) 
             
         if (self.monitor):    
             if a[0]:
                 self.setDistTableSuccAtIndex(tmpIndex, a[1])
             else:
                 self.setDistTableFailAtIndex(tmpIndex, a[1])       
-            self.setProbTableAtIndex(tmpIndex, a[0]) 
+            self.updateProbTableAtIndex(tmpIndex, a[0]) 
         return a    

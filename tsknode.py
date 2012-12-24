@@ -31,8 +31,8 @@ class TskNode (node):
             
         a = [True, 0]        
         a[0]= self.getRandomProb(index)
-        if (self.getNot()):
-            a[0] = not(a[0])        
+#        if (self.getNot()):
+#            a[0] = not(a[0])        
         if a[0]:
             a[1] = round(self.getDistSuccByIndex(index).calcProb(), 1)
         else:

@@ -46,9 +46,9 @@ def test6():
     tree = node()
     root = tree
     #first child
-    firstChild = root.addNode("parallel")
+    firstChild = root.addNode("par")
     if firstChild == None:
-        print ("error creating seq node")
+        print ("error creating par node")
         print("test 7: failed :-(")
         return None
     dist_succ = _createUniformDist(2,5)
@@ -61,9 +61,9 @@ def test6():
           if tempN == None:
               print ("error creating seq node")
       if j==1:  
-          tempN = firstChild.addNode("select")
+          tempN = firstChild.addNode("sel")
           if tempN == None:
-              print ("error creating seq node")
+              print ("error creating sel node")
       if j==2:  
           tempN = firstChild.addNode("loop")
           if tempN == None:
@@ -140,9 +140,9 @@ def test7():
     tree = node()
     root = tree
     #first child
-    firstChild = root.addNode("parallel")
+    firstChild = root.addNode("par")
     if firstChild == None:
-        print ("error creating seq node")
+        print ("error creating parallel node")
         print("test 7: failed :-(")
         return None
     dist_succ = _createUniformDist(2,5)
@@ -365,7 +365,7 @@ if __name__ == "__main__":
 #    test2()
 #    test3()
 #    test4()
-    test5()
+#    test5()
     test6()
 #    test7()
 #    test8()

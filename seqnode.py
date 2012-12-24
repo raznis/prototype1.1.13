@@ -14,7 +14,7 @@ class SeqNode (node):
         tmpIndex = index 
         
         if (node.debugMode):
-            if not(self.isChildDebug()):
+            if not(self.hasDebugChild()):
                 return self.runAsBaseCase(index)
             else:
                 if not(self.reset):
@@ -26,23 +26,18 @@ class SeqNode (node):
         
         a = [True, 0]        
         for i in self.getChildren():                       
-            b = i.run(index)           
+            b = i.run(index)  
             a[0] = a[0] and b[0]
-            #self.setSucc(a[0])
             a[1] = a[1] + b[1]           
-            #self.setTime(a[1])
             if not b[0]:	  
                 break
-            
-        if (self.getNot()):
-            a[0] = not(a[0])
             
         if (self.monitor):    
             if a[0]:
                 self.setDistTableSuccAtIndex(tmpIndex, a[1])
             else:
                 self.setDistTableFailAtIndex(tmpIndex, a[1])    
-            self.setProbTableAtIndex(tmpIndex, a[0])
+            self.updateProbTableAtIndex(tmpIndex, a[0])
         return a    
         
         

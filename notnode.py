@@ -14,4 +14,33 @@ class NotNode (node):
 
     
     def run (self, index):
-        print ("please implemnt run func in notNode")
+        tmpIndex = index 
+        
+        if (node.debugMode):
+            if not(self.hasDebugChild()):
+                return self.runAsBaseCase(index)
+            else:
+                if not(self.reset):
+                    self.clear()
+        
+        debug = node.run(self, index)
+        if (debug!=None):
+            return debug             
+        
+        a = [True, 0]
+
+
+
+        child = self.getChildren()
+        b = child[0].run(index)
+        a[0] = not(b[0])
+        a[1] = b[1]
+
+            
+        if (self.monitor):    
+            if a[0]:
+                self.setDistTableSuccAtIndex(tmpIndex, a[1])
+            else:
+                self.setDistTableFailAtIndex(tmpIndex, a[1])    
+            self.updateProbTableAtIndex(tmpIndex, a[0])
+        return a    
