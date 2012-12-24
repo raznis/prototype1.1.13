@@ -53,7 +53,7 @@ class node:
         #node debuge child property
         self.DEBUGchild= False   
         self._updateChildDebug()
-        self.DEBUG = self._setDebugFromXmlFile()
+        self.DEBUG = self._getDebugFromXmlFile()
      
         #node not property
         #self._updateNot()
@@ -155,7 +155,9 @@ class node:
     
     #input: child num in the list , output: a new child node- not a deepcopy    
     def getChild(self,index):
-            if index >= len(self.childList):
+            if self.childList == None:
+                self.getChildren()
+            if index > len(self.childList):
                 print ("there is no such a child index")
                 return None
             else:
@@ -225,8 +227,8 @@ class node:
         #remove method compares elements based on identity, not on tag value or contents.
         self.treeInst.remove(elem)
         
-#    def __getitem__(self):
-#        return self
+    def __getitem__(self):
+        return self
 #######################-----Adi changes(23/12/2012)-----####################  
     
         
@@ -331,28 +333,41 @@ class node:
                 updateString+= str(self.DEBUG[1])
                 self.setAttrib("DEBUG",updateString) 
                 
+                
     # this func read attribute "DEBUG" from xml. and parse it by whiteSpace
-    def _setDebugFromXmlFile(self):
+    def _getDebugFromXmlFile(self):
         #get string from xml - "True 0.1" for example.
           debug = self.getAttrib("DEBUG")
           if debug !=None :
+              self.DEBUG =[]
               #parse the string by whiteSpace and returns a list
               debug = self._parseString(debug)
               #first element in the list should be boolen- success
-              if debug[0]!=None and debug[0] == "True":
-                  debug[0] = True
-              else :
-                  debug[0] = False
-              # second element in the list should be time - float number
-              if debug[1]!=None and debug[1].isdigit():
-                  debug[1]=float(debug[1])
-              else :
-                  debug = None
-          self.DEBUG = debug
-          
-    
-                  
-          
+              #second element is float
+              if debug[0]!=None:
+                  if str(debug[0]) == "True":
+                      return [True,float(debug[1])]
+                  else :
+                      return [False,float(debug[1])]
+
+    #get debug time- return float
+    def getDEBUGtime(self):
+        if self.DEBUG != None:
+            return float(self.DEBUG[1])
+    #get debug status- return bool
+    def getDEBUGsucc(self):
+        if self.DEBUG != None:
+            if str(self.DEBUG[0]) == "True":
+                return True
+            else:
+                return False
+    #set debug with boolSucee(True,False) and time- float
+    def setDEBUGresult(self,boolSucc,time):
+        if str(boolSucc) == "True":
+            self.DEBUG = [True,float(time)]
+        else :
+            self.DEBUG = [False,float(time)]        
+        
               
             
 #######################-----Adi changes(17/12/2012)-----####################
