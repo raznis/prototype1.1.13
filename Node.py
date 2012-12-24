@@ -53,7 +53,7 @@ class node:
         #node debuge child property
         self.DEBUGchild= False   
         self._updateChildDebug()
-        self.DEBUG = None
+        self.DEBUG = self._setDebugFromXmlFile()
      
         #node not property
         #self._updateNot()
@@ -293,9 +293,10 @@ class node:
             if updateNode == None :
                 return None
             if updateNode.distTableSucc != [] :
-                self.setAttrib("Successdistribution",self._distTableToString(self.distTableSucc))
+                updateNode.setAttrib("Successdistribution",updateNode._distTableToString(updateNode.distTableSucc))
             if updateNode.distTableFail != [] :  
-                self.setAttrib("Failuredistribution",self._distTableToString(self.distTableFail))
+                updateNode.setAttrib("Failuredistribution",updateNode._distTableToString(updateNode.distTableFail))
+
                 
             #get child list
             childList = updateNode.getChildren()
@@ -303,8 +304,45 @@ class node:
             if childList != None :
                 for child in childList :
                     self._updateEtreeToPrintXmlFile(child)
-            
-            
+                    
+            #update Debug attributes in the xml file.        
+            updateNode._updateDebugAttribToXmlFile()
+     
+               
+   #this func update the attribute in the xml file for debug 
+    def _updateDebugAttribToXmlFile(self):
+            if self.DEBUG != None:
+                updateString =""
+                if self.DEBUG[0]== True:
+                    updateString+="True"+" "
+                else :
+                    updateString+="False"+" "
+                updateString+= str(self.DEBUG[1])
+                self.setAttrib("DEBUG",updateString) 
+                
+    # this func read attribute "DEBUG" from xml. and parse it by whiteSpace
+    def _setDebugFromXmlFile(self):
+        #get string from xml - "True 0.1" for example.
+          debug = self.getAttrib("DEBUG")
+          if debug !=None :
+              #parse the string by whiteSpace and returns a list
+              debug = self._parseString(debug)
+              #first element in the list should be boolen- success
+              if debug[0]!=None and debug[0] == "True":
+                  debug[0] = True
+              else :
+                  debug[0] = False
+              # second element in the list should be time - float number
+              if debug[1]!=None and debug[1].isdigit():
+                  debug[1]=float(debug[1])
+              else :
+                  debug = None
+          self.DEBUG = debug
+          
+    
+                  
+          
+              
             
 #######################-----Adi changes(17/12/2012)-----####################
 
@@ -328,8 +366,8 @@ class node:
         return self.DEBUGchild
         
     #dont know when we use this func        
-    def DEBUGnode(self,sSucc=None,sTime=None):
-        self.DEBUG = True
+    #def DEBUGnode(self,sSucc=None,sTime=None):
+    #    self.DEBUG = True
         
         
     def getDistSuccFromAttrib(self):
@@ -363,14 +401,14 @@ class node:
         
         
     #check debug attribute - [True/False , time]   
-    def _readDebugFromAttrib(self):
-        ans = self.getAttrib("DEBUG")       
-        if ans!=None :
+    #def _readDebugFromAttrib(self):
+    #    ans = self.getAttrib("DEBUG")       
+    #    if ans!=None :
             #debug is a list. hold two parms- DEBUG[0]- True/False , DEBUG[1]- time
-            self.DEBUG = self._parseString(ans)            
-        else:
+    #        self.DEBUG = self._parseString(ans)            
+    #    else:
             #debug set to None if can't read attributes from xml file
-            self.DEBUG = None
+    #        self.DEBUG = None
             
             
     #get a table-distributions list and translate it back to string that we know how to read from xml file       
