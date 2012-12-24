@@ -17,7 +17,7 @@ class TskNode (node):
         # not working yet..
         self.distTableSucc = self.createDistTable("Successdistribution")
         self.distTableFail = self.createDistTable("Failuredistribution")
-        self._readDebugFromAttrib()
+        #self._readDebugFromAttrib()
         
         
         
