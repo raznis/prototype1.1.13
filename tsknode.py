@@ -55,31 +55,15 @@ class TskNode (node):
         self.DEBUG = [sSucc,sTime]
         #would you like to update success ans time success?
     
-#######################-----Adi changes(17/12/2012)-----####################
+#######################-----Adi changes(23/12/2012)-----####################
 
-    def getDistSuccByIndex(self,index):
-        if len(self.distTableSucc) > index:
-            return self.distTableSucc[index]
-        return None
-        
-     ################################need update!!!! ################
-
-    def getDistFailByIndex(self,index):
-        if len(self.distTableFail) > index:
-            return self.distTableFail[index]
-        return None
-     ################################need update!!!! ################            
-            
-    
     #table is the name of the table needed- attribute
     def createDistTable(self,table):
         string = self.getAttrib(str(table))
         
         table =[]        
         if string != None:
-            
             table = self._parseString(string)
-         #   print (table[0])
         newDistTable =[]
         
         #loop over the table- range (0,table len-1)- specifying the step value as 2
@@ -100,34 +84,35 @@ class TskNode (node):
                 
         return newDistTable
             
-        
+    #create computed distribution
     def _createComputedDist(self,Sinput):
         ans =self._getDictOfNumPairFromString(Sinput)
-        from distributions.computed import Computed
         return Computed(ans)        
-    
+    #create normal distribution
     def _createNormalDist(self,Sinput):
       ans = self._getTwoNumFromString(Sinput)
-      from distributions.normal import Normal
       return Normal(ans[0],ans[1])
        
-       
+    #create uniform distribution  
     def _createUniformDist(self,Sinput):
        ans = self._getTwoNumFromString(Sinput)
-       from distributions.uniform import Uniform
        return Uniform(ans[0],ans[1])
     
     def _createDiscreteDist(self,string):
         pass
      
 
+    #input- string "num,num" output: tauple [num,num]
+    # we use this func to divide two numbers for distribution parmeters value
+    #can only work for two numbers in the string
     def _getTwoNumFromString(self,Sinput):
       stringNumA = ""
       stringNumB = ""
       nextNum = False
       
       #loop over the string
-      for index in range(0, len(Sinput)):          
+      for index in range(0, len(Sinput)):  
+          #check if the Sinput[index] is a number or "." - for float num.
           if (Sinput[index].isdigit() or Sinput[index]=='.' ) == True and (nextNum == False):
               stringNumA += str( Sinput[index] )
               continue
@@ -138,23 +123,26 @@ class TskNode (node):
               stringNumB+= str(Sinput[index] ) 
               continue
               
-      
+      #return a tauple of two str that represent float number
       return [str(stringNumA),str(stringNumB)]
       
       
       
     # Sinput should look like this - C[123,123],[123,1231],[54,23] 
     #input- the string above, output: disctionary of key and value
+    #we use this func to create the map/dictionary for computed distribution
     def _getDictOfNumPairFromString(self,Sinput):
         openBracket = False
         stringPair=""
+        #start pairList as empty dictionary
         PairList = {}
+        #iter from index=0 to strint- Sinput size
         for index in range(0,len(Sinput)):
             if Sinput[index] == '[' and openBracket == False :
                 openBracket = True
                 continue
             if Sinput[index] == ']' and openBracket == True:
-                #call getTwoNumFromString func with stringPair and appand to the PairList
+                #call getTwoNumFromString func with stringPair and appand to the PairList- to get a tauple[num,num]
                 pair = self._getTwoNumFromString(stringPair)
                 PairList[str(pair[0])]= str(pair[1])
                 #update open bracket to close                
@@ -165,7 +153,7 @@ class TskNode (node):
             if openBracket == True :
                 stringPair += Sinput[index]
                 continue
-            
+        #return distionry  
         return PairList
             
             

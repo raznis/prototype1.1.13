@@ -11,6 +11,7 @@ from Node import node
 class NotNode (node):
     def __init__(self,treeInst,mytree,parent):
         node.__init__(self,treeInst,mytree,"not",parent)
+
     
     def run (self, index):
         print ("please implemnt run func in notNode")

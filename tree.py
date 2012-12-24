@@ -17,15 +17,21 @@ class xmlTree:
         else:
             self.root= root
             
+        
         self.fileName = fileName
         self.rootNode = node(self.root,self,self.root.tag)
-        
-        
+        self._getUpdateTree()
+                
+    #this func build the wrap for all the tree.
+    def _getUpdateTree(self):
+        self.rootNode._updateEtreeToPrintXmlFile(self.rootNode)
+            
     #print the tree to xml file. if non is given, prints to the original file
     def treeToXml(self,fileName = None):
-        strT = etree.tostring(self.root,pretty_print = True)
         
-       
+        self. _getUpdateTree()
+        
+        strT = etree.tostring(self.root,pretty_print = True)
         if fileName != None :
             with open(fileName, "w") as text_file:
                 text_file.write(strT)

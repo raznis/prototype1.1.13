@@ -9,7 +9,7 @@ def test1():
     tree = node()
     root = tree
     #first child
-    newChild = root.addNode("parallel")
+    newChild = root.addNode("par")#parallel
     #notice that the childlist start from zero.
     child = root.getChild(0)
     #compare by instance id:
@@ -64,7 +64,7 @@ def test3():
     else:
         tempN.setAttrib("probability","0.1 0.5")
         
-    tempN = firstChild.addNode("parallel")
+    tempN = firstChild.addNode("par")
     if tempN == None:
          print ("error creating parallel node")
     else:
@@ -76,7 +76,7 @@ def test3():
     else:
         tempN.setAttrib("probability","0.1 0.5")
         
-    tempN = firstChild.addNode("select")
+    tempN = firstChild.addNode("sel")
     if tempN == None:
         print ("error creating selector node")
     else:
@@ -109,9 +109,9 @@ def test4():
     ans.append((firstChild.getChild(0)).boolWhoAmI("seq"))
     ans.append((firstChild.getChild(1)).boolWhoAmI("seq"))
     ans.append((firstChild.getChild(2)).boolWhoAmI("loop"))
-    ans.append((firstChild.getChild(3)).boolWhoAmI("parallel"))
+    ans.append((firstChild.getChild(3)).boolWhoAmI("par"))
     ans.append((firstChild.getChild(4)).boolWhoAmI("tsk"))
-    ans.append((firstChild.getChild(5)).boolWhoAmI("select"))
+    ans.append((firstChild.getChild(5)).boolWhoAmI("sel"))
     
     for index in range(0,7):
         if ans[index] == False:
@@ -171,7 +171,7 @@ def test7():
     tree = node()
     root = tree
     #first child
-    firstChild = root.addNode("parallel")
+    firstChild = root.addNode("par")
     if firstChild == None:
         print ("error creating seq node")
         print("test 7: failed :-(")
@@ -198,8 +198,8 @@ def test7():
                       else:
                           tempN2.setAttrib("time","1")
                           tempN2.setAttrib("succ","T")
-                          tempN2.setTime(0)
-                          tempN2.setSucc(False)
+                          #tempN2.setTime(0)
+                          #tempN2.setSucc(False)
                           tempN2.setProbTable([0.8, 0.5])
                           for i in range(2):
                               tempN2.addDistToSuccTable(dist_succ)
@@ -214,8 +214,8 @@ def test7():
               else:
                   tempN1.setAttrib("time","1")
                   tempN1.setAttrib("succ","T")
-                  tempN1.setTime(0)
-                  tempN1.setSucc(False)
+                  #tempN1.setTime(0)
+                  #tempN1.setSucc(False)
                   tempN1.setProbTable([0.7, 0.5])
                   for i in range(2):
                       tempN1.addDistToSuccTable(dist_succ)
@@ -364,7 +364,11 @@ def test10():
    else:
         ("test 10.2: failed :-( - check computed dist")
         
-        
+def test11():
+    #in AdiEvent2- I removed x,y and id attribue. so we can see easily the decorator not,loop (L!)
+    tree = xmlTree("AdiEvent2.xml")
+    tree.treeToXml("test11.xml")
+    print("test 11:success- check test11.xml file")     
 
 
 #changed by RAZ -- we can now import from dist.* files, since the directory has an empty __init__.py file, and python recognizes it as a module.#thanks
@@ -390,7 +394,8 @@ if __name__ == "__main__":
     test4()
     test5()
     test6()
-    test7()
+#    test7()
     test8()
     test9()
     test10()
+    test11()

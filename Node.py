@@ -8,6 +8,7 @@ import math
 import re
 from lxml import etree
 from distributions.computed import Computed
+from copy import deepcopy
 
 class node:
     
@@ -55,7 +56,7 @@ class node:
         self.DEBUG = None
      
         #node not property
-        self._updateNot()
+        #self._updateNot()
         self.reset = False
             
         
@@ -126,10 +127,11 @@ class node:
 
     #return list of the node children
     def getChildren (self):
+        #call _createChildList which create a wrap for the etree node chilren - 
         return self._createChildList()
                 
         
-    #create the childs list    
+    #create the wrap for child list and return a list    
     def _createChildList(self):
         if len(self.childList) !=0:
             return self.childList
@@ -137,9 +139,9 @@ class node:
             self.childList.append(self._createChildByTag(element))
         return self.childList
     
-    #output: disType as a string, or None
-    def _getDisttribuationType(self):
-        return self.getAttrib("distribution")
+    #output: distribution as a string, or None
+    #def _getDisttribuationType(self):
+    #    return self.getAttrib("distribution")
     
     #output: return prob string or None
     # def getProbString(self):
@@ -151,9 +153,9 @@ class node:
     #         print("please check if there is a probString")
     #    return prob
     
-    #input: child num in the list , output: a new child now- not a deepcopy    
+    #input: child num in the list , output: a new child node- not a deepcopy    
     def getChild(self,index):
-            if index >= self.getBF():
+            if index >= len(self.childList):
                 print ("there is no such a child index")
                 return None
             else:
@@ -172,7 +174,7 @@ class node:
     def _createChildByTag(self,elem):
         if elem == None:
             return None
-        #create the new node accordint to the type
+        #create the new node according to type
         if elem.tag == "seq":
             from seqnode import SeqNode
             return SeqNode(elem,self.myTree,self)
@@ -182,17 +184,23 @@ class node:
       #  if elem.tag == "monitor":
       #      from monitornode import monitorNode
       #      return monitorNode(elem,self.myTree,self)
+      
+        #decorstor - L is for loop according to cogniteam code        
+        if elem.tag == "dec":
+            return self._CreatDecoratorNodesFromName(elem)    
         if elem.tag == "loop":
             from loopnode import LoopNode
             return LoopNode(elem,self.myTree,self)
             #need to continue implementing the rest..
-      # if elem.tag == "not":
-      #     from notnode import NotNode
-      #     return NotNode(elem,self.myTree,self)
-        if elem.tag =="parallel":
+        if elem.tag == "not":
+           from notnode import NotNode
+           return NotNode(elem,self.myTree,self)
+        #parallel        
+        if elem.tag =="par": 
             from parallelnode import ParallelNode 
             return ParallelNode(elem,self.myTree,self)
-        if elem.tag =="select":
+        #selector
+        if elem.tag =="sel": 
             from selectnode import SelectNode 
             return SelectNode(elem,self.myTree,self)
                 
@@ -200,19 +208,104 @@ class node:
             
             
     def treeToXml(self,fileName):
+       root =self.myTree.getRoot()
+       self._updateEtreeToPrintXmlFile(root)
        self.myTree.treeToXml(fileName)
          
          
     def setMonitor(self,boolSet):
         self.monitor = boolSet
-        
+    
+    #this func compare the node by there instance ID given by python func id.
     def comparTo(self,nodeToCompare):
         return id(self)==id(nodeToCompare)
+    
+    #this func remove the elem from the original xml tree. r
+    def _removeSubElement(self,elem):
+        #remove method compares elements based on identity, not on tag value or contents.
+        self.treeInst.remove(elem)
         
 #    def __getitem__(self):
 #        return self
+#######################-----Adi changes(23/12/2012)-----####################  
+
+    #input - EtreeInst- element which it's tag is dec - decorator
+    #output new node- loop/not with childen- example- for dec "!L!" crete not - loop - not      
+    def _CreatDecoratorNodesFromName(self, element):
+        name = element.get("name")
+        newChild = None
+        newEtreeInst = deepcopy(element)
+        parent = element.getparent()
+        lastChild = None
+        #print (etree.tostring( newEtreeInst))
+        #itertating over name char and creating node child as necessary
+        for char in name:        
+                #new child is the first child that replace decorator
+                if newChild == None:
+                        #if char is "L"- create loop node
+                        if char == "L" :
+                            #addNode func- create the node by tag and appand it to self.childList
+                            newChild = self.addNode("loop") 
+                        #if char is "!" - create not node
+                        else:
+                            if char == "!":
+                                    newChild = self.addNode("not")
+                #after we create newChild we'll appand it all the other- by newChild.addNode func.
+                else:
+                    if char == "L" :
+                        lastChild = newChild.addNode("loop")
+                    if char == "!":
+                        lastChild = newChild.addNode("not")
+                        
+                        
+        #if we succeded to create newChild and hid children we will give the last node all decorator attributes by deepcopy dec-treeInst                
+        if lastChild !=None :
+            lastChildParent =  lastChild.treeInst.getparent()
+            #assigning the new tag for dec attributes not/loop.
+            if lastChild.treeInst.tag == "not":
+                newEtreeInst.tag="not"
+            if lastChild.treeInst.tag == "loop":
+                newEtreeInst.tag="loop"
+            #maintain the pointers with the etree and node tree to point the updated nodes.
+           
+            lastChildParent.remove(lastChild.treeInst)
+            lastChild.treeInst = newEtreeInst
+            lastChildParent.append(lastChild.treeInst)
+            
+        #if we didn't create newChild any other children- exmple- <dec name ="L /dec>
+        #we create only new child as loop- we'll git it decorator attributes.
+        else:
+            if newChild != None:
+                if newChild.treeInst.tag == "not":
+                    newEtreeInst.tag="not"
+                if newChild.treeInst.tag == "loop":
+                    newEtreeInst.tag="loop"
+                newChild.treeInst = newEtreeInst
+            
+       #after reading it name and creating nodes as necessary we want to replace this subElement with the updated tree and update the xml tree(used to be decorator)
+       #replace(self, old_element, new_element)
+        parent.replace(element, newChild.treeInst)
         
-      
+        return newChild
+       
+        
+    def _updateEtreeToPrintXmlFile(self,updateNode):
+            if updateNode == None :
+                return None
+            if updateNode.distTableSucc != [] :
+                self.setAttrib("Successdistribution",self._distTableToString(self.distTableSucc))
+            if updateNode.distTableFail != [] :  
+                self.setAttrib("Failuredistribution",self._distTableToString(self.distTableFail))
+                
+            #get child list
+            childList = updateNode.getChildren()
+            #iterate over child list with recursive call (list of lists)  
+            if childList != None :
+                for child in childList :
+                    self._updateEtreeToPrintXmlFile(child)
+            
+            
+            
 #######################-----Adi changes(17/12/2012)-----####################
 
     def getSuccDistAtIndex(self,index):
@@ -229,8 +322,9 @@ class node:
             if element.get("DEBUG") != None:
                 self.DEBUGchild = True
                 break
-            
-    def isChildDebug(self):
+   
+    #return true/false if the node has a debug child         
+    def hasDebugChild(self):
         return self.DEBUGchild
         
     #dont know when we use this func        
@@ -249,18 +343,19 @@ class node:
 
     def addDistToFailTable(self, dist):
         self.distTableFail.append(dist)
+        
     #try to read attribute from the xml file and update not node. if no attribute, update to False    
-    def _updateNot(self):
-        ans = self.getAttrib("not")
-        if ans!= None:
-            if str(ans) == "T":
-                self.isNot = True
-            else:
-                self.isNot = False
+   # def _updateNot(self):
+    #    ans = self.getAttrib("not")
+    #    if ans!= None:
+    #        if str(ans) == "T":
+    #            self.isNot = True
+    #        else:
+    #            self.isNot = False
                 
     #return true or false is this node is not
-    def getNot(self):
-        return self.isNot
+    #def getNot(self):
+    #    return self.isNot
         
     #debug getter
     def getDebug(self):
@@ -271,20 +366,24 @@ class node:
     def _readDebugFromAttrib(self):
         ans = self.getAttrib("DEBUG")       
         if ans!=None :
+            #debug is a list. hold two parms- DEBUG[0]- True/False , DEBUG[1]- time
             self.DEBUG = self._parseString(ans)            
         else:
+            #debug set to None if can't read attributes from xml file
             self.DEBUG = None
             
             
+    #get a table-distributions list and translate it back to string that we know how to read from xml file       
     def _distTableToString(self,table):
         string =""
-        i=0
+        #iterate all over the table len
         for index in range(0,len(table)) :
-#            print i
-            i=i+1
+            #each dist has toString func- that we appand to string
             string += ((table[index]).toString())
+            #we don't want whitSpace at the end of the string so we appand it only if we didn't reach the last index in the table            
             if index < (len(table)-1):
                 string+=" "
+        #return the table as string- for empty table we return empty string.
         return (string)        
         
 #######################-----Liat changes-----###############################
@@ -339,7 +438,7 @@ class node:
 #        self.setAttrib("succ",self.succ)
         
         
-    def setProbTableAtIndex(self, index, val):
+    def updateProbTableAtIndex(self, index, val):
         if (self.probTable==None or len(self.probTable)==0 ):
 #            print "liat"
             a = []
