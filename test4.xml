@@ -1,30 +1,30 @@
 <plan>
-  <par Successdistribution="C[[14.2,1][27.3,1][16.9,1]] C[]" probability="[[3, 5], [0, 0]]" Failuredistribution="C[[9.7,1][14.4,1]] C[]">
-    <seq Failuredistribution="C[[7.1,1][18.3,1][6.8,1]] C[]" probability="[[2, 5], [0, 0]]" Successdistribution="C[[14.2,1][16.9,1]] C[]">
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
+  <par Successdistribution="C[[16.0,2][29.0,1][21.0,1]] C[]" probability="[[4, 5], [0, 0]]" Failuredistribution="C[[15.0,1]] C[]">
+    <seq Successdistribution="C[[16.0,1]] C[]" probability="[[1, 5], [0, 0]]" Failuredistribution="C[[20.0,1][13.0,1][6.0,1][15.0,1]] C[]">
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]"/>
     </seq>
-    <seq Successdistribution="C[[27.3,1]] C[]" probability="[[1, 5], [0, 0]]" Failuredistribution="C[[6.5,1][12.7,1][6.7,1][9.7,1]] C[]">
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <seq Successdistribution="C[[13.3,1]] C[]" probability="[[1, 1], [0, 0]]">
-        <tsk time="1" succ="T" probability="[0.8, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-        <tsk time="1" succ="T" probability="[0.8, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-        <tsk time="1" succ="T" probability="[0.8, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-        <tsk time="1" succ="T" probability="[0.8, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
+    <seq Failuredistribution="C[[9.0,2][10.0,1][21.0,1]] C[]" probability="[[1, 5], [0, 0]]" Successdistribution="C[[29.0,1]] C[]">
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]"/>
+      <seq Failuredistribution="C[[15.0,1]] C[]" probability="[[1, 2], [0, 0]]" Successdistribution="C[[17.0,1]] C[]">
+        <tsk probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]" DEBUG="[True, 100]"/>
+        <tsk probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]" DEBUG="[True, 100]"/>
+        <tsk probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]" DEBUG="[True, 100]"/>
+        <tsk probability="[0.8, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,10.0]" DEBUG="[True, 100]"/>
       </seq>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,9.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,9.0]"/>
     </seq>
-    <seq Failuredistribution="C[[13.5,1][9.0,1][10.4,1][7.8,1][14.4,1]] C[]" probability="[[0, 5], [0, 0]]">
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
-      <tsk time="1" succ="T" probability="[0.7, 0.5]" Successdistribution="[&lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;, &lt;distributions.uniform.Uniform instance at 0xa4852ec&gt;]" Failuredistribution="[&lt;distributions.uniform.Uniform instance at 0xa48530c&gt;, &lt;distributions.uniform.Uniform instance at 0xa48530c&gt;]"/>
+    <seq Failuredistribution="C[[8.0,1][12.0,1][14.0,1]] C[]" probability="[[2, 5], [0, 0]]" Successdistribution="C[[16.0,1][21.0,1]] C[]">
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,9.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,9.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,9.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,9.0]"/>
+      <tsk probability="[0.7, 0.5]" Successdistribution="U[2.0,5.0]" Failuredistribution="U[6.0,9.0]"/>
     </seq>
   </par>
 </plan>

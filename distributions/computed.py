@@ -31,7 +31,7 @@ class Computed(Distribution):
             
     #search for the time key in the dictionary- return 0  or count.- value
     def getCountByTime(self,time):
-        ans = self.map.get(str(time))        
+        ans = self.map.get(float(time))        
         if (ans != None):
             return ans
         return 0

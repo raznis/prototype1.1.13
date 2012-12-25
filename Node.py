@@ -53,7 +53,8 @@ class node:
         #node debuge child property
         self.DEBUGchild= False   
         self._updateChildDebug()
-        self.DEBUG = self._getDebugFromXmlFile()
+        
+        self.DEBUG = self._setDebugFromXmlFile()
      
         #node not property
         #self._updateNot()
@@ -155,17 +156,18 @@ class node:
     
     #input: child num in the list , output: a new child node- not a deepcopy    
     def getChild(self,index):
-            if self.childList == None:
-                self.getChildren()
-            if index > len(self.childList):
-                print ("there is no such a child index")
-                return None
+        if index >= len(self.childList):
+#            if self.childList == None:
+#                self.getChildren()
+#            if index > len(self.childList):
+            print ("there is no such a child index")
+            return None
+        else:
+            if len(self.childList) > 0:
+                return self.childList[index]
             else:
-                if len(self.childList) > 0:
-                    return self.childList[index]
-                else:
-                    self._createChildList()
-                    return self.childList[index]
+                self._createChildList()
+                return self.childList[index]
              #run the node. each subclass should imple
         
     #def run(self, index):
@@ -335,38 +337,52 @@ class node:
                 
                 
     # this func read attribute "DEBUG" from xml. and parse it by whiteSpace
-    def _getDebugFromXmlFile(self):
+    def _setDebugFromXmlFile(self):
         #get string from xml - "True 0.1" for example.
           debug = self.getAttrib("DEBUG")
           if debug !=None :
               self.DEBUG =[]
               #parse the string by whiteSpace and returns a list
               debug = self._parseString(debug)
+              
               #first element in the list should be boolen- success
-              #second element is float
-              if debug[0]!=None:
-                  if str(debug[0]) == "True":
-                      return [True,float(debug[1])]
-                  else :
-                      return [False,float(debug[1])]
+              if debug[0]!=None and debug[0] == "True":
+                  debug[0] = True
+              else :
+                 debug[0] = False   
+             # second element in the list should be time - float number
+              if debug[1]!=None and debug[1].isdigit():
+                  debug[1]=float(debug[1])
+              else :
+                  debug = None
+                  
+#              self.DEBUG = debug
+              return debug  
 
-    #get debug time- return float
-    def getDEBUGtime(self):
-        if self.DEBUG != None:
-            return float(self.DEBUG[1])
-    #get debug status- return bool
-    def getDEBUGsucc(self):
-        if self.DEBUG != None:
-            if str(self.DEBUG[0]) == "True":
-                return True
-            else:
-                return False
-    #set debug with boolSucee(True,False) and time- float
-    def setDEBUGresult(self,boolSucc,time):
-        if str(boolSucc) == "True":
-            self.DEBUG = [True,float(time)]
-        else :
-            self.DEBUG = [False,float(time)]        
+#              #second element is float
+#              if debug[0]!=None:
+#                  if str(debug[0]) == "True":
+#                      return [True,float(debug[1])]
+#                  else :
+#                      return [False,float(debug[1])]
+#
+#    #get debug time- return float
+#    def getDEBUGtime(self):
+#        if self.DEBUG != None:
+#            return float(self.DEBUG[1])
+#    #get debug status- return bool
+#    def getDEBUGsucc(self):
+#        if self.DEBUG != None:
+#            if str(self.DEBUG[0]) == "True":
+#                return True
+#            else:
+#                return False
+#    #set debug with boolSucee(True,False) and time- float
+#    def setDEBUGresult(self,boolSucc,time):
+#        if str(boolSucc) == "True":
+#            self.DEBUG = [True,float(time)]
+#        else :
+#            self.DEBUG = [False,float(time)]        
         
               
             
@@ -456,8 +472,10 @@ class node:
 
     def getRandomProb(self, index):
         x = random.random()
-        #print x, self.getProbAtIndex(index)
-        return (x <= float(self.getProbAtIndex(index)))
+        p = float(self.getProbAtIndex(index))
+#        if p==None:
+#            self.updateProbTableAtIndex(index, )    
+        return (x <= p)
         
     def getTimeByDist(self, index):
         pass
@@ -476,31 +494,7 @@ class node:
         self.distTableFail = distTable
         self.setAttrib("Failuredistribution",self._distTableToString(self.distTableFail))    
       
-#    #getter-time
-#    def getTime(self):
-#        if (self.getSucc()):
-#            #self.setTime(random.random())
-#            self.setTime(1)
-#        else:
-#            self.setTime(2)             
-#        return self.time
-#    
-#    #setter time
-#    def setTime(self,time):
-#        self.time = time
-#        self.setAttrib("time",time)   
-#        
-#        
-#    def getSucc(self):
-#        return (self.succ == True)
-#        
-#    def setSucc(self, setbool):
-#        if setbool == True:
-#             self.succ = True
-#        else :
-#             self.succ = False
-#        self.setAttrib("succ",self.succ)
-        
+
         
     def updateProbTableAtIndex(self, index, val):
         if (self.probTable==None or len(self.probTable)==0 ):
@@ -552,18 +546,18 @@ class node:
             if self.boolWhoAmI("tsk"):
                 return self.probTable[index]
             else:                
-                return self.probTable[index][0]/self.probTable[index][1]                
+                return self.probTable[index][0]/self.probTable[index][1]
+#        print "getProbAtIndex"                
         return None
      
     def run(self, index):
         a = None
         if (node.debugMode):
             tmpIndex  = index
-            a = self.getDebug()
+            a = self.DEBUG
             if (a!=None):
 #                if (self.getNot()):
 #                    a[0] = not(a[0])
-
                 if not(self.boolWhoAmI("tsk")): 
                     if (self.monitor):
                         if a[0]:
@@ -584,7 +578,6 @@ class node:
         debug = node.run(self, index)
         if (debug!=None):
             return debug  
-            
         a = [True, 0]        
         a[0]= self.getRandomProb(index)
 #        if (self.getNot()):

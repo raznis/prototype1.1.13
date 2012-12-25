@@ -15,7 +15,6 @@ class NotNode (node):
     
     def run (self, index):
         tmpIndex = index 
-        
         if (node.debugMode):
             if not(self.hasDebugChild()):
                 return self.runAsBaseCase(index)
@@ -28,8 +27,6 @@ class NotNode (node):
             return debug             
         
         a = [True, 0]
-
-
 
         child = self.getChildren()
         b = child[0].run(index)

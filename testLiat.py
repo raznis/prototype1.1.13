@@ -6,41 +6,7 @@ from Node import node
 
 
 #please run test 3 before test 5: - check attrib func/method    
-def test5():
-    tree = node()
-    root = tree
-    #first child
-    firstChild = root.addNode("seq")
-    if firstChild == None:
-        print ("error creating seq node")
-        print("test 7: failed :-(")
-        return None
-    dist_succ = _createUniformDist(2,5)
-    dist_fail = _createUniformDist(6,10)   
-    firstChild.isNot  =True 
-    temp = firstChild.addNode("parallel")      
-    for j in range(3):     
-      tempN = temp.addNode("tsk")      
-      if tempN == None:
-          print ("error creating seq node")
-      else: 
-                                  
-          tempN.setProbTable([0.3, 0.5])
-          for i in range(2):
-              dist_fail = _createUniformDist(6,10-i)  
-              tempN.addDistToSuccTable(dist_succ)
-              tempN.addDistToFailTable(dist_fail)
-          tempN.setAttrib("Successdistribution",tempN._distTableToString(tempN.distTableSucc))
-          tempN.setAttrib("Failuredistribution",tempN._distTableToString(tempN.distTableFail))
-          tempN.setDebug(True, 100)
-          tempN.setAttrib("DEBUG", tempN.DEBUG)
 
-    node.debugMode = False
-    for i in range(5):
-        firstChild.run(0)
-    root.treeToXml("test3.xml")                   
-    print("test 5: success! please check the file test3.xml - every tag need to have the same attrib.")
-    
  #check the monitor set/get func/method   
 def test6():
     tree = node()
@@ -361,11 +327,7 @@ def _createUniformDist(parmA,parmB):
 
 if __name__ == "__main__":
     #run the 10 tests
-#    test1()
-#    test2()
-#    test3()
-#    test4()
-    test5()
+
     test6()
     test7()
     test8()

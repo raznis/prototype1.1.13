@@ -25,7 +25,7 @@ class SeqNode (node):
             return debug             
         
         a = [True, 0]        
-        for i in self.getChildren():                       
+        for i in self.getChildren():                     
             b = i.run(index)  
             a[0] = a[0] and b[0]
             a[1] = a[1] + b[1]           
