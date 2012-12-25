@@ -398,7 +398,7 @@ def test14():
     firstChild = root.addNode("par")
     if firstChild == None:
         print ("error creating seq node")
-        print("test 7: failed :-(")
+        print("test 14: failed :-(")
         return None
     dist_succ = _createUniformDist(2,5)
     dist_fail = _createUniformDist(6,10)   
@@ -484,7 +484,7 @@ def test15():
     firstChild = root.addNode("par")
     if firstChild == None:
         print ("error creating seq node")
-        print("test 7: failed :-(")
+        print("test 15: failed :-(")
         return None
     dist_succ = _createUniformDist(2,5)
     dist_fail = _createUniformDist(6,10)   
@@ -573,17 +573,17 @@ def _createUniformDist(parmA,parmB):
 
 if __name__ == "__main__":
     #run the 10 tests
-#    test1()
-#    test2()
-#    test3()
-#    test4()
-#    test5()
-#    test6()
-#    test7()
-#    test8()
-#    test9()
-#    test10()
+    test1()
+    test2()
+    test3()
+    test4()
+    test5()
+    test6()
+    test7()
+    test8()
+    test9()
+    test10()
     test11()
-#    test12()
-#    test14()
-#    test15()
+    test12()
+    test14()
+    test15()
