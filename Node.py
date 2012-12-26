@@ -546,7 +546,7 @@ class node:
             if self.boolWhoAmI("tsk"):
                 return self.probTable[index]
             else:                
-                return self.probTable[index][0]/self.probTable[index][1]
+                return (float)(self.probTable[index][0]/self.probTable[index][1])
 #        print "getProbAtIndex"                
         return None
      
@@ -617,3 +617,13 @@ class node:
     def runPlan(self, index):
       children = self.getChildren()
       children[0].run(index)    
+
+    def getAverageSuccTime(self, index):
+        numOfValues = 0
+        totalOfValues = 0.0
+        timeValueMap = self.getDistSuccByIndex(index)
+        for key in timeValueMap.keys():
+            numOfValues = numOfValues + timeValueMap.get(key)
+            totalOfValues = totalOfValues + (key * timeValueMap.get(key))
+        return totalOfValues / numOfValues
+
