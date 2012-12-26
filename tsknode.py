@@ -65,10 +65,8 @@ class TskNode (node):
         if string != None:
             table = self._parseString(string)
         newDistTable =[]
-        
         #loop over the table- range (0,table len-1)- specifying the step value as 2
-        for index in range(0,len(table)-1,1):
-
+        for index in range(len(table)):
             #computed dist   
             if (table[index][0] == 'C'):
                 newDistTable.append(self._createComputedDist(table[index]))
@@ -80,7 +78,9 @@ class TskNode (node):
                 pass
             #iniform dist- create new instance and 
             if(table[index][0] == 'U'):
-                newDistTable.append(self._createUniformDist(table[index]))
+                x=self._createUniformDist(table[index])
+#                x.printMe()
+                newDistTable.append(x)
                 
         return newDistTable
             

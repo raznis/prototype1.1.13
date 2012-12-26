@@ -15,7 +15,9 @@ class SelectNode (node):
         
         if (node.debugMode):
             if not(self.hasDebugChild()):
-                return self.runAsBaseCase(index)    
+                res = self.runAsBaseCase(index)
+                if res!=None:
+                    return res
             else:
                 if not(self.reset):
                     self.clear()

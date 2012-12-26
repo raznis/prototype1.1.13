@@ -69,4 +69,29 @@ class Computed(Distribution):
             #print string
         string+="]"
         return string           
-        
+     
+#    def toString(self):
+#        string ="C["
+#        
+#        sortKeyList = []
+#        for key in self.map :
+#            sortKeyList.append(float(key))
+#        sortKeyList = sorted(sortKeyList)
+#        
+#        for key in sortKeyList :
+#        #for index in self.map:
+#            #print i
+#            string+= str("["+str(key)+","+str(self.map.get(str(key)))+"]")
+#            
+#            #print string
+#        string +="]"
+#        return string       
+     
+    def calcAverageTime(self):
+        numOfValues = 0.0
+        totalOfValues = 0.0
+        timeValueMap = self.map
+        for key in timeValueMap:
+            numOfValues = numOfValues + timeValueMap.get(key)
+            totalOfValues = totalOfValues + (key * timeValueMap.get(key))
+        return totalOfValues / numOfValues   

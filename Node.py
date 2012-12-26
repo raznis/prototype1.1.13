@@ -162,7 +162,7 @@ class node:
 #            if self.childList == None:
 #                self.getChildren()
 #            if index > len(self.childList):
-            print ("there is no such a child index")
+            #print ("there is no such a child index")
             return None
         else:
             if len(self.childList) > 0:
@@ -310,9 +310,9 @@ class node:
       
       childToCheck = newChild
       for i in range(num):
-	if childToCheck != None:
-	  childToCheck._updateChildDebug()
-	  childToCheck = childToCheck.getChild(0)
+        	if childToCheck != None:
+        	  childToCheck._updateChildDebug()
+        	  childToCheck = childToCheck.getChild(0)
 	
 	
     def _updateEtreeToPrintXmlFile(self,updateNode):
@@ -412,7 +412,6 @@ class node:
         for element in self.treeInst.iter(tag=etree.Element):
 	    
             if element.get("DEBUG") != None:
-		print self.treeInst.tag
                 self.DEBUGchild = True
                 break
    
@@ -486,8 +485,8 @@ class node:
     def getRandomProb(self, index):
         x = random.random()
         p = float(self.getProbAtIndex(index))
-#        if p==None:
-#            self.updateProbTableAtIndex(index, )    
+        if p==None:
+            return None
         return (x <= p)
         
     def getTimeByDist(self, index):
@@ -559,7 +558,7 @@ class node:
             if self.boolWhoAmI("tsk"):
                 return self.probTable[index]
             else:                
-                return (float)(self.probTable[index][0]/self.probTable[index][1])
+                return (float(self.probTable[index][0])/float(self.probTable[index][1]))
 #        print "getProbAtIndex"                
         return None
      
@@ -591,8 +590,11 @@ class node:
         debug = node.run(self, index)
         if (debug!=None):
             return debug  
-        a = [True, 0]        
-        a[0]= self.getRandomProb(index)
+        a = [True, 0]
+        randP = self.getRandomProb(index)   
+        if randP==None:
+            return None
+        a[0]= randP
 #        if (self.getNot()):
 #            a[0] = not(a[0])        
         if a[0]:
@@ -629,14 +631,9 @@ class node:
        
     def runPlan(self, index):
       children = self.getChildren()
-      children[0].run(index)    
+      children[0].run(index) 
 
     def getAverageSuccTime(self, index):
-        numOfValues = 0
-        totalOfValues = 0.0
-        timeValueMap = self.getDistSuccByIndex(index)
-        for key in timeValueMap.keys():
-            numOfValues = numOfValues + timeValueMap.get(key)
-            totalOfValues = totalOfValues + (key * timeValueMap.get(key))
-        return totalOfValues / numOfValues
+        return self.getDistSuccByIndex(index).calcAverageTime()
+        
 
