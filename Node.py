@@ -51,11 +51,12 @@ class node:
             self.probTable= None
         
         #node debuge child property
+
         self.DEBUGchild= False   
         self._updateChildDebug()
         
         self.DEBUG = self._setDebugFromXmlFile()
-     
+	
         #node not property
         #self._updateNot()
         self.reset = False
@@ -99,6 +100,7 @@ class node:
     def addNode(self,tag):
         node =self._createChildByTag(etree.SubElement(self.treeInst,tag))
         self.childList.append(node)
+        
         return node
     #    while True :
     #        print("would you like to add attri0.1" resubutes to the new node?(Y/N)")
@@ -301,9 +303,18 @@ class node:
        #replace(self, old_element, new_element)
         parent.replace(element, newChild.treeInst)
         
+        self._updateChildDebugForDec(newChild , len(name))
         return newChild
        
-        
+    def _updateChildDebugForDec(self,newChild,num):
+      
+      childToCheck = newChild
+      for i in range(num):
+	if childToCheck != None:
+	  childToCheck._updateChildDebug()
+	  childToCheck = childToCheck.getChild(0)
+	
+	
     def _updateEtreeToPrintXmlFile(self,updateNode):
             if updateNode == None :
                 return None
@@ -365,7 +376,8 @@ class node:
 #                      return [True,float(debug[1])]
 #                  else :
 #                      return [False,float(debug[1])]
-#
+#        print (self.treeInst.tag)
+
 #    #get debug time- return float
 #    def getDEBUGtime(self):
 #        if self.DEBUG != None:
@@ -397,9 +409,10 @@ class node:
             return self.distTableFail[index]
         
     def _updateChildDebug(self):
-        
         for element in self.treeInst.iter(tag=etree.Element):
+	    
             if element.get("DEBUG") != None:
+		print self.treeInst.tag
                 self.DEBUGchild = True
                 break
    
