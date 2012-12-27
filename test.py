@@ -20,7 +20,7 @@ def test1():
 
 #provide a tree xml file      
 def test2():
-    tree = xmlTree("test2.xml")
+    tree = xmlTree("tests/test2.xml")
     root = tree.getRoot()
     # root is always a plan    
     newNode = root.getChild(0)
@@ -94,12 +94,12 @@ def test3():
     
     #print the tree we built from scratch to xml file.
     #please check the file- every tag need to have the same attrib.
-    root.treeToXml("test3.xml")
+    root.treeToXml("tests/test3.xml")
     
 
 #please run test 3 before test 4:    
 def test4():
-    tree = xmlTree("test3.xml")
+    tree = xmlTree("tests/test3.xml")
     #remember- root is alwayes type/tag- plan
     root = tree.getRoot()
     ans = []
@@ -122,7 +122,7 @@ def test4():
            
 #please run test 3 before test 5: - check attrib func/method    
 def test5():
-    tree = xmlTree("test3.xml")
+    tree = xmlTree("tests/test3.xml")
     #remember- root is alwayes type/tag- plan
     root = tree.getRoot()
     ans = []
@@ -150,7 +150,7 @@ def test5():
     
  #check the monitor set/get func/method   
 def test6():
-    tree = xmlTree("test2.xml")
+    tree = xmlTree("tests/test2.xml")
     root = tree.getRoot()
     firstChild = root.getChild(0)
     childList = firstChild.getChildren()
@@ -236,17 +236,17 @@ def test7():
     for childNode in firstChildList:
         count += 1
     if count == 3:
-        print("test 7: success! please check the file test4.xml - every tag need to have the same attrib.")
+        print("test 7: success! please check the file output/test4.xml - every tag need to have the same attrib.")
     else:
         print("test 7: failed :-(")
     
     #print the tree we built from scratch to xml file.
     #please check the file- every tag need to have the same attrib.
-    root.treeToXml("test4.xml")
+    root.treeToXml("output/test4.xml")
     
     
 def test8():
-   tree = xmlTree("test3.xml")
+   tree = xmlTree("tests/test3.xml")
    root = tree.getRoot()
    
    #this child is type- tsk
@@ -286,7 +286,7 @@ def test8():
         
 #this test read test9.xml and create distributaion as needed for tskNode 
 def test9():
-   tree = xmlTree("test9.xml")
+   tree = xmlTree("tests/test9.xml")
    #root it node type plan
    root = tree.getRoot()
    
@@ -320,7 +320,7 @@ def test9():
        
        
 def test10():
-   tree = xmlTree("test3.xml")
+   tree = xmlTree("tests/test3.xml")
    root = tree.getRoot()
    
    #this child is type- tsk
@@ -385,9 +385,9 @@ def test10():
 #            print ("test 11.2: failed :-( ")            
 
 def test12():
-    tree = xmlTree("event1.xml")
-    tree.treeToXml("test12.xml")
-    print("test 12: success- check test12.xml file")      
+    tree = xmlTree("tests/event1.xml")
+    tree.treeToXml("output/test12.xml")
+    print("test 12: success- check output/test12.xml file")      
 
 
 
@@ -464,13 +464,13 @@ def test14():
     node.debugMode = False
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("test14a.xml") 
+    root.treeToXml("output/test14a.xml") 
     print("test 14.1: success! please check the file test14a.xml - every tag need to have the same attrib.")
     print "phase 2"
     node.debugMode = True
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("test14b.xml") 
+    root.treeToXml("output/test14b.xml") 
     print("test 14.2: success! please check the file test14b.xml - every tag need to have the same attrib.")
         
    
@@ -540,12 +540,12 @@ def test15():
     node.debugMode = False
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("test15a.xml") 
+    root.treeToXml("output/test15a.xml") 
     print("test 15.1: success! please check the file test15a.xml - every tag need to have the same attrib.")
     node.debugMode = True
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("test13b.xml") 
+    root.treeToXml("output/test13b.xml") 
     print("test 15.2: success! please check the file test15b.xml - every tag need to have the same attrib.")
         
         

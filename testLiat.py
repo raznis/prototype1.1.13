@@ -81,13 +81,13 @@ def test6():
     node.debugMode = False
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("test4.xml") 
+    root.treeToXml("output/test4.xml") 
     
     print "phase 2"
     node.debugMode = True
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("test5.xml") 
+    root.treeToXml("output/test5.xml") 
     
         
         
@@ -165,13 +165,13 @@ def test7():
     node.debugMode = False
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("test4.xml") 
+    root.treeToXml("output/test4.xml") 
     
     print "phase 2"
     node.debugMode = True
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("test5.xml") 
+    root.treeToXml("output/test5.xml") 
     
         
         
@@ -189,7 +189,7 @@ def test7():
     
     
 def test8():
-   tree = xmlTree("test3.xml")
+   tree = xmlTree("tests/test3.xml")
    root = tree.getRoot()
    
    #this child is type- tsk
@@ -229,7 +229,7 @@ def test8():
         
 #this test read test9.xml and create distributaion as needed for tskNode 
 def test9():
-   tree = xmlTree("test9.xml")
+   tree = xmlTree("tests/test9.xml")
    #root it node type plan
    root = tree.getRoot()
    
@@ -263,7 +263,7 @@ def test9():
        
        
 def test10():
-   tree = xmlTree("test3.xml")
+   tree = xmlTree("tests/test3.xml")
    root = tree.getRoot()
    
    #this child is type- tsk
