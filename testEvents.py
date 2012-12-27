@@ -94,8 +94,46 @@ def test3():
     elapsed = (time.time() - start)
     print "Time: %f" %elapsed
 
+def test4():
+    print "-------TEST 4-------"
+    start = time.time()
+    tree = xmlTree("small_test.xml")
+    root = tree.getRoot()
+    node.parmetersInTheWorld = 1
+
+    root.treeToXml("small_test_before_run.xml")  
+    print("test 4.1: success!")
+ 
+    node.debugMode = False
+    for i in range(100):
+        root.runPlan(0)    
+    for i in range(100):
+        root.runPlan(1)
+    root.treeToXml("small_test_no_debug.xml") 
+    print("test 4.2: success!")
+    print "Success probability in offline mode: Clear sky = %f, Cloudy = %f" %(root.getChild(0).getProbAtIndex(0),root.getChild(0).getProbAtIndex(1))
+    print "Average success time with clear sky = %f" %(root.getChild(0).getAverageSuccTime(0))
+    print "Average success time when Cloudy = %f" %(root.getChild(0).getAverageSuccTime(1))
+    elapsed = (time.time() - start)
+    print "Time: %f" %elapsed
+    print "-------Debug mode-------"
+    node.debugMode = True
+    for i in range(100):
+        root.runPlan(0)    
+    for i in range(100):
+        root.runPlan(1)   
+    root.treeToXml("small_test_debug_mode.xml") 
+    print("test 4.3: success!")
+    print "Success probability in debug mode: Clear sky = %f, Cloudy = %f" %(root.getChild(0).getProbAtIndex(0),root.getChild(0).getProbAtIndex(1))
+    print "Average success time in debug mode with clear sky = %f" %(root.getChild(0).getAverageSuccTime(0))
+    print "Average success time in debug mode when Cloudy = %f" %(root.getChild(0).getAverageSuccTime(1))
+    elapsed = (time.time() - start)
+    print "Time: %f" %elapsed
+    print "-----------------------"
+    
 if __name__ == "__main__":
     #run the 10 tests
     test1()
     test2()
     test3()
+    test4()
