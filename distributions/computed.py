@@ -96,4 +96,6 @@ class Computed(Distribution):
         for key in timeValueMap:
             numOfValues = numOfValues + timeValueMap.get(key)
             totalOfValues = totalOfValues + (key * timeValueMap.get(key))
+        if  numOfValues==0:
+            return float('Inf')
         return totalOfValues / numOfValues   
