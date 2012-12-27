@@ -93,12 +93,15 @@ class node:
     def getBF(self):
         return (len(self.treeInst))
     
-    
-
+    #create a new node. append it as a child to the self.treeInst and return a node 
+    def createNode(self,tag):
+         node = self._createChildByTag(etree.SubElement(self.treeInst,tag))
+         return node
     #input:string-tagtype, create a new node with tag-type and add it to the node direct children
+    #append the new child to the node children list
     #output - return the newNode
     def addNode(self,tag):
-        node =self._createChildByTag(etree.SubElement(self.treeInst,tag))
+        node = self.createNode(tag)
         self.childList.append(node)
         
         return node
@@ -193,7 +196,8 @@ class node:
       
         #decorstor - L is for loop according to cogniteam code        
         if elem.tag == "dec":
-            return self._CreatDecoratorNodesFromName(elem)    
+            #createDecNodeFromName will append the right child to self
+            return self._CreatDecoratorNodesFromName(elem)
         if elem.tag == "loop":
             from loopnode import LoopNode
             return LoopNode(elem,self.myTree,self)
@@ -241,6 +245,9 @@ class node:
     #output new node- loop/not with childen- example- for dec "!L!" crete not - loop - not      
     def _CreatDecoratorNodesFromName(self, element):
         name = element.get("name")
+        #update Indentation
+        ident = element.text
+        identTail = element.tail
         newChild = None
         newEtreeInst = deepcopy(element)
         parent = element.getparent()
@@ -253,11 +260,15 @@ class node:
                         #if char is "L"- create loop node
                         if char == "L" :
                             #addNode func- create the node by tag and appand it to self.childList
-                            newChild = self.addNode("loop") 
+                            newChild = self.createNode("loop")
+                            
                         #if char is "!" - create not node
                         else:
                             if char == "!":
-                                    newChild = self.addNode("not")
+                                    newChild = self.createNode("not")
+                        if newChild!= None:
+                            newChild.treeInst.text = ident
+                            newChild.treeInst.tail = identTail
                 #after we create newChild we'll appand it all the other- by newChild.addNode func.
                 else:
 #                    if char == "L" :
@@ -267,14 +278,25 @@ class node:
                     if lastChild == None:
                             if char == "L" :
                                 lastChild = newChild.addNode("loop")
+                                
                             if char == "!":
                                 lastChild = newChild.addNode("not")
+                                
+                            if lastChild!= None:
+                                lastChild.treeInst.text = ident
+                                lastChild.treeInst.tail = identTail
                     else:
                             if char == "L" :
                                 lastChild = lastChild.addNode("loop")
+                                
                             if char == "!":
-                                lastChild = lastChild.addNode("not")    
-                        
+                                lastChild = lastChild.addNode("not")  
+                                
+                            lastChild.treeInst.text = ident
+                            lastChild.treeInst.tail = identTail
+                #update Indentation
+                ident += "\t"
+               
         #if we succeded to create newChild and hid children we will give the last node all decorator attributes by deepcopy dec-treeInst                
         if lastChild !=None :
             lastChildParent =  lastChild.treeInst.getparent()
@@ -297,13 +319,18 @@ class node:
                     newEtreeInst.tag="not"
                 if newChild.treeInst.tag == "loop":
                     newEtreeInst.tag="loop"
+                (parent).remove(newChild.treeInst)
                 newChild.treeInst = newEtreeInst
+                (parent).append(newChild.treeInst)
             
        #after reading it name and creating nodes as necessary we want to replace this subElement with the updated tree and update the xml tree(used to be decorator)
        #replace(self, old_element, new_element)
         parent.replace(element, newChild.treeInst)
+        #print(self.treeInst.tag , self.getChildren())
+        #, self.getChild(0).treeInst.tag, self.getChild(1).treeInst.tag#, self.getChild(2).treeInst.tag
         
         self._updateChildDebugForDec(newChild , len(name))
+        #print self.treeInst.tag, len(list(self.treeInst)) ,(list(self.treeInst))[0],(list(self.treeInst))[1]
         return newChild
        
     def _updateChildDebugForDec(self,newChild,num):
@@ -563,6 +590,10 @@ class node:
         return None
      
     def run(self, index):
+        #for debug
+        #if self.boolWhoAmI("par"):
+        #   print self.treeInst.tag, len(self.getChildren()), self.getChild(0).treeInst.tag, self.getChild(1).treeInst.tag, self.getChild(2).treeInst.tag
+            
         a = None
         if (node.debugMode):
             tmpIndex  = index
