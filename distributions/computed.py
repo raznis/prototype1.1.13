@@ -23,15 +23,23 @@ class Computed(Distribution):
         s = 0.0
         a = 0
         for i in self.map.values():
-            s=s+i
+            if i !='':
+                s=s+float(i)
         for i in self.map:
-            a = a + self.map.get(i)/s
-            if (a >= x):
-                return i
+            if  i!='':
+                value = self.map.get(i)
+                if value!='':
+                    a = a + (float(value))/s
+                    if (a >= x):
+                        return i
             
     #search for the time key in the dictionary- return 0  or count.- value
     def getCountByTime(self,time):
         ans = self.map.get(float(time))        
+        if (ans != None):
+            return ans
+        else:
+            ans = self.map.get(str(time))
         if (ans != None):
             return ans
         return 0
@@ -75,13 +83,15 @@ class Computed(Distribution):
         
         sortKeyList = []
         for key in self.map :
+            if key == '':
+                break
             sortKeyList.append(float(key))
         sortKeyList = sorted(sortKeyList)
         
         for key in sortKeyList :
         #for index in self.map:
             #print i
-            string+= str("["+str(key)+","+str(self.map.get((key)))+"]")
+            string+= str("["+str(key)+","+str(self.getCountByTime((key)))+"]")
             
             #print string
         string +="]"
