@@ -7,8 +7,11 @@ import random
 import math
 import re
 from lxml import etree
-from distributions.computed import Computed
 from copy import deepcopy
+#DISTRIBUTIONS
+from distributions.computed import Computed
+from distributions.normal import Normal
+from distributions.uniform import Uniform
 
 class node:
     
@@ -41,8 +44,8 @@ class node:
         #node probebility table
         self.probTable = []
         # node distribution table for success and failure
-        self.distTableSucc = []
-        self.distTableFail = []
+        self.distTableSucc = self.createDistTable("Successdistribution")
+        self.distTableFail = self.createDistTable("Failuredistribution")
         #update probability table
         probString = self.getAttrib("probability")
         if probString !=None:
@@ -67,6 +70,7 @@ class node:
     #parseString by whiteSpace
     def _parseString(self, string):
         words = re.split('\s+',string)
+        #print (words)
         return words
         
     
@@ -329,17 +333,21 @@ class node:
         #print(self.treeInst.tag , self.getChildren())
         #, self.getChild(0).treeInst.tag, self.getChild(1).treeInst.tag#, self.getChild(2).treeInst.tag
         
-        self._updateChildDebugForDec(newChild , len(name))
+        self._updateChildForDec(newChild , len(name))
         #print self.treeInst.tag, len(list(self.treeInst)) ,(list(self.treeInst))[0],(list(self.treeInst))[1]
         return newChild
        
-    def _updateChildDebugForDec(self,newChild,num):
+    def _updateChildForDec(self,newChild,num):
       
       childToCheck = newChild
       for i in range(num):
         	if childToCheck != None:
-        	  childToCheck._updateChildDebug()
-        	  childToCheck = childToCheck.getChild(0)
+                  childToCheck._updateChildDebug()
+                  childToCheck.distTableSucc = self.createDistTable("Successdistribution")
+                  childToCheck.distTableFail = self.createDistTable("Failuredistribution")
+                  childToCheck = childToCheck.getChild(0)
+             
+      
 	
 	
     def _updateEtreeToPrintXmlFile(self,updateNode):
@@ -349,6 +357,9 @@ class node:
                 updateNode.setAttrib("Successdistribution",updateNode._distTableToString(updateNode.distTableSucc))
             if updateNode.distTableFail != [] :  
                 updateNode.setAttrib("Failuredistribution",updateNode._distTableToString(updateNode.distTableFail))
+           # if updateNode.probTable != []:
+           #     updateNode.setAttrib("probability", updateNode._listToString(updateNode.probTable))
+
 
                 
             #get child list
@@ -373,7 +384,24 @@ class node:
                 updateString+= str(self.DEBUG[1])
                 self.setAttrib("DEBUG",updateString) 
                 
-                
+    #def _listToString(self, listToConvert):
+    #     if listToConvert == None :
+    #         return
+    #     string = ""
+    #     for index in range(len(listToConvert)) :
+    #         if isinstance(listToConvert[index],list):
+    #             if float(listToConvert[index][1]) !=0:
+    #                 value = float(listToConvert[index][0])/float(listToConvert[index][1])
+    #             else:
+    #                 value = "0.0"
+    #             string +=str(value)
+             
+    #         else:
+    #             string += str(listToConvert[index])
+    #         if index <( len(listToConvert) -1):             
+    #             string += " "
+    #    
+    #     return string
     # this func read attribute "DEBUG" from xml. and parse it by whiteSpace
     def _setDebugFromXmlFile(self):
         #get string from xml - "True 0.1" for example.
@@ -494,6 +522,8 @@ class node:
             
     #get a table-distributions list and translate it back to string that we know how to read from xml file       
     def _distTableToString(self,table):
+        if table == None:
+            return None
         string =""
         #iterate all over the table len
         for index in range(0,len(table)) :
@@ -511,6 +541,7 @@ class node:
 
     def getRandomProb(self, index):
         x = random.random()
+        #print(self.treeInst.tag , self.probTable)
         p = float(self.getProbAtIndex(index))
         if p==None:
             return None
@@ -545,15 +576,38 @@ class node:
         if val:
             self.probTable[index][0] = self.probTable[index][0]+1
             self.probTable[index][1] = self.probTable[index][1]+1
-            self.setAttrib("probability",self.probTable)
+            self._updateProbTableToXmlFile()            
+            #self.setAttrib("probability",self.probTable)
+           # print "------check prob table:------"
+           # print self.probTable
         else:
             self.probTable[index][1] = self.probTable[index][1]+1
-            self.setAttrib("probability",self.probTable)
+            self._updateProbTableToXmlFile() 
+            #self.setAttrib("probability",self.probTable)
             
     
+           
             
+    def _updateProbTableToXmlFile(self):
+        if (self.probTable==None or len(self.probTable)==0 ):
+            return
+        probTableString = ""
+        for index in self.probTable :
+             if len(index) == 2 :
+                 if float(index[1]) != 0 :
+                     probTableString += str(float(index[0])/float(index[1]))
+                 else:
+                     probTableString += '0'                                 
+                 
+             else :
+                probTableString += str(index)
+                
+             probTableString +=' '
             
+        self.setAttrib("probability",probTableString)
             
+                
+        
     def setDistTableSuccAtIndex(self, index, time):
         if (self.distTableSucc==[]):
             a = []
@@ -582,10 +636,16 @@ class node:
     #getter for probIndex
     def getProbAtIndex(self,index):
         if self.probTable!=None and len(self.probTable) > index:
-            if self.boolWhoAmI("tsk"):
-                return self.probTable[index]
-            else:                
-                return (float(self.probTable[index][0])/float(self.probTable[index][1]))
+            #if self.boolWhoAmI("tsk"):
+                
+            if (isinstance(self.probTable[index],float) or isinstance(self.probTable[index],int) or 
+                (isinstance(self.probTable[index],str))): #and (self.probTable[index]).isdigit() )): 
+                    #and len(self.probTable[index]) != 2:
+                return float(self.probTable[index])
+            else:
+                if float(self.probTable[index][1]) !=0 :           
+                    return (float(self.probTable[index][0])/float(self.probTable[index][1]))
+                return 0
 #        print "getProbAtIndex"                
         return None
      
@@ -598,10 +658,12 @@ class node:
         if (node.debugMode):
             tmpIndex  = index
             a = self.DEBUG
+            #print(self.treeInst.tag,a)
             if (a!=None):
 #                if (self.getNot()):
 #                    a[0] = not(a[0])
                 if not(self.boolWhoAmI("tsk")): 
+                    #print (self.treeInst.tag , self.monitor)
                     if (self.monitor):
                         if a[0]:
                             self.setDistTableSuccAtIndex(tmpIndex, a[1])
@@ -629,8 +691,12 @@ class node:
 #        if (self.getNot()):
 #            a[0] = not(a[0])        
         if a[0]:
+            #print(self.treeInst.tag , index , "succ")
+            #print(self.distTableSucc)
             a[1] = self.getDistSuccByIndex(index).calcProb()
         else:
+            #print(self.treeInst.tag , index , "fail")
+            #print(self.distTableFail)            
             a[1] = self.getDistFailByIndex(index).calcProb()
 
         return a
@@ -667,4 +733,106 @@ class node:
     def getAverageSuccTime(self, index):
         return self.getDistSuccByIndex(index).calcAverageTime()
         
+#######################-----Adi changes - coopy from tsk-----###############################
 
+ #table is the name of the table needed- attribute
+    def createDistTable(self,table):
+        string = self.getAttrib(str(table))
+        
+        table =[]        
+        if string != None:
+            table = self._parseString(string)
+
+        newDistTable =[]
+        #loop over the table- range (0,table len-1)- specifying the step value as 2
+        if table != None:        
+            for index in range(len(table)):
+                #computed dist   
+                if (table[index][0] == 'C'):
+                    newDistTable.append(self._createComputedDist(table[index]))
+                #normal dist
+                if(str(table[index][0]) =='N'):
+                    newDistTable.append(self._createNormalDist(table[index]))
+                #discrete dist
+                if(table[index][0] == 'D'):
+                    pass
+                #iniform dist- create new instance and 
+                if(table[index][0] == 'U'):
+                    x=self._createUniformDist(table[index])
+    #                x.printMe()
+                    newDistTable.append(x)
+
+        return newDistTable
+            
+    #create computed distribution
+    def _createComputedDist(self,Sinput):
+        ans =self._getDictOfNumPairFromString(Sinput)
+        return Computed(ans)        
+    #create normal distribution
+    def _createNormalDist(self,Sinput):
+      ans = self._getTwoNumFromString(Sinput)
+      return Normal(ans[0],ans[1])
+       
+    #create uniform distribution  
+    def _createUniformDist(self,Sinput):
+       ans = self._getTwoNumFromString(Sinput)
+       return Uniform(ans[0],ans[1])
+    
+    def _createDiscreteDist(self,string):
+        pass
+     
+
+    #input- string "num,num" output: tauple [num,num]
+    # we use this func to divide two numbers for distribution parmeters value
+    #can only work for two numbers in the string
+    def _getTwoNumFromString(self,Sinput):
+      stringNumA = ""
+      stringNumB = ""
+      nextNum = False
+      
+      #loop over the string
+      for index in range(0, len(Sinput)):  
+          #check if the Sinput[index] is a number or "." - for float num.
+          if (Sinput[index].isdigit() or Sinput[index]=='.' ) == True and (nextNum == False):
+              stringNumA += str( Sinput[index] )
+              continue
+          if(str(Sinput[index]) ==','):
+              nextNum= True
+              continue
+          if (Sinput[index].isdigit() or Sinput[index]=='.') == True and (nextNum == True):
+              stringNumB+= str(Sinput[index] ) 
+              continue
+              
+      #return a tauple of two str that represent float number
+      return [str(stringNumA),str(stringNumB)]
+      
+      
+      
+    # Sinput should look like this - C[123,123],[123,1231],[54,23] 
+    #input- the string above, output: disctionary of key and value
+    #we use this func to create the map/dictionary for computed distribution
+    def _getDictOfNumPairFromString(self,Sinput):
+        openBracket = False
+        stringPair=""
+        #start pairList as empty dictionary
+        PairList = {}
+        #iter from index=0 to strint- Sinput size
+        for index in range(0,len(Sinput)):
+            if Sinput[index] == '[' and openBracket == False :
+                openBracket = True
+                continue
+            if Sinput[index] == ']' and openBracket == True:
+                #call getTwoNumFromString func with stringPair and appand to the PairList- to get a tauple[num,num]
+                pair = self._getTwoNumFromString(stringPair)
+                PairList[str(pair[0])]= str(pair[1])
+                #update open bracket to close                
+                openBracket = False
+                #init the stringPair
+                stringPair = ""
+                continue
+            if openBracket == True :
+                stringPair += Sinput[index]
+                continue
+        #return distionry  
+        return PairList
+            
