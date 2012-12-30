@@ -168,15 +168,16 @@ def test5():
     root.treeToXml("output/small_test_after_offline.xml") 
     print "Finished gathering offline statistics."
     print "-------Debug mode-------"
-    node.debugMode = True    
+      
     tree = xmlTree("output/small_test_after_offline.xml")
+    node.debugMode = True  
     root = tree.getRoot()
     for i in range(1000):
         root.runPlan(0)    
     for i in range(1000):
         root.runPlan(1)   
     root.treeToXml("output/small_test_debug_mode.xml") 
-    print("test 4.3: success!")
+    print("test 5: success!")
     print "Success probability in debug mode: Clear sky = %f, Cloudy = %f" %(root.getChild(0).getProbAtIndex(0),root.getChild(0).getProbAtIndex(1))
     print "Average success time in debug mode with clear sky = %f" %(root.getChild(0).getAverageSuccTime(0))
     print "Average success time in debug mode when Cloudy = %f" %(root.getChild(0).getAverageSuccTime(1))

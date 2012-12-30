@@ -55,8 +55,8 @@ def test6():
                               tempN2.addDistToFailTable(dist_fail)
                           tempN2.setAttrib("Successdistribution",tempN2._distTableToString(tempN2.distTableSucc))
                           tempN2.setAttrib("Failuredistribution",tempN2._distTableToString(tempN2.distTableFail))
-                          tempN2.setDebug(True, 100)
-                          tempN2.setAttrib("DEBUG", tempN2.DEBUG)
+                          tempN2.setDebug("True 100")
+
                               
           else:
               tempN1 = tempN.addNode("tsk")
@@ -140,8 +140,8 @@ def test7():
                               tempN2.addDistToFailTable(dist_fail)
                           tempN2.setAttrib("Successdistribution",tempN2._distTableToString(tempN2.distTableSucc))
                           tempN2.setAttrib("Failuredistribution",tempN2._distTableToString(tempN2.distTableFail))
-                          tempN2.setDebug(True, 100)
-                          tempN2.setAttrib("DEBUG", tempN2.DEBUG)
+                          tempN2.setDebug("True 100")
+                          
                               
           else:
               tempN1 = tempN.addNode("tsk")

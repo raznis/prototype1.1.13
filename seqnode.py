@@ -23,6 +23,7 @@ class SeqNode (node):
                     self.clear()
         
         debug = node.run(self, index)
+        #print self.getChild(0).DEBUG, debug
         if (debug!=None):
             return debug             
         

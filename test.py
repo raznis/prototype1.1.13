@@ -438,8 +438,7 @@ def test14():
                               tempN2.addDistToFailTable(dist_fail)
                           tempN2.setAttrib("Successdistribution",tempN2._distTableToString(tempN2.distTableSucc))
                           tempN2.setAttrib("Failuredistribution",tempN2._distTableToString(tempN2.distTableFail))
-                          tempN2.setDebug(True, 100)
-                          tempN2.setAttrib("DEBUG", tempN2.DEBUG)
+                          tempN2.setDebug("True 100")
                               
           else:
               tempN1 = tempN.addNode("tsk")
@@ -515,8 +514,7 @@ def test15():
                               tempN2.addDistToFailTable(dist_fail)
                           tempN2.setAttrib("Successdistribution",tempN2._distTableToString(tempN2.distTableSucc))
                           tempN2.setAttrib("Failuredistribution",tempN2._distTableToString(tempN2.distTableFail))
-                          tempN2.setDebug(True, 100)
-                          tempN2.setAttrib("DEBUG", tempN2.DEBUG)
+                          tempN2.setDebug("True 100")
                               
           else:
               tempN1 = tempN.addNode("tsk")
@@ -545,7 +543,7 @@ def test15():
     node.debugMode = True
     for i in range(5):
         firstChild.run(0)
-    root.treeToXml("output/test13b.xml") 
+    root.treeToXml("output/test15b.xml") 
     print("test 15.2: success! please check the file test15b.xml - every tag need to have the same attrib.")
         
         
