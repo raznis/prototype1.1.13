@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-
-@author: polak
+node class. this class is the base class for all the node type in the tree.
+global variable- parmetersInTheWorld- represent the amount of parm we have
+               - debugMode- represent the run mode 
+this class maintain the updates between the calculated arguments such as probability, distributions and debug,
+and update the etree in order to print it to xml file.
+as well read from xml file to etree and then wrap the etree in order to calculate diff arguments.
+         
 """
 import random
 import math
@@ -23,8 +28,6 @@ class node:
     
     #constractur- treeInstance-node in the etree, the etree itself, and prep-type(seq,plan etc.)
     def __init__(self,treeInstance = None,mytree = None,prep="plan",parent=None):
-
-            
         # you can't have multiple __init__ functions in Python so we use mytree = None
         if mytree == None :
 	  #create a new tree instance with plan node as root
@@ -37,13 +40,14 @@ class node:
             self.treeInst = treeInstance
 
         self.parent = parent 
-        #node monitor property
+        # monitor - boolean property, default-True
         self.monitor = True
         #node child list
         self.childList = []
         #node probebility table
         self.probTable = []
         # node distribution table for success and failure
+        #distribution table - each entry points to a distribution
         self.distTableSucc = self.createDistTable("Successdistribution")
         self.distTableFail = self.createDistTable("Failuredistribution")
         #update probability table
@@ -55,35 +59,28 @@ class node:
         
         #node debuge child property
 
+        #DEBUGchild -  boolean value if we have a debug node in the sub-tree which was already debug- default- False
         self.DEBUGchild= False   
         self._updateChildDebug()
-        
+        # DEBUG - list of two parameters first elem is boolean, second parm- is float        
         self.DEBUG = self._setDebugFromXmlFile()
 	
 	#flag that indicates if this node was updated after debug
         self.reset = False
             
-        
-        
-        
     #parseString by whiteSpace
     def _parseString(self, string):
         words = re.split('\s+',string)
 	#return a list of words seperate by whiteSpace
         return words
         
-    
-	
-	
     #return parent. if it's the root- return None   
     def getParent(self):
         return self.parent
 
-    
     #get branch-factor        
     def getBF(self):
         return (len(self.treeInst))
-    
     
     #create a new node. append it as a child to the self.treeInst and return a node 
     def createNode(self,tag):
@@ -133,23 +130,28 @@ class node:
     
     #input: child num in the list , output: a new child node- not a deepcopy    
     def getChild(self,index):
+        #return none if index given is bigger then the list length
         if index >= len(self.childList):
             return None
         else:
+            #if child list is not empty - return pointer to the node
             if len(self.childList) > 0:
                 return self.childList[index]
             else:
+                #create child list and return the child at index
                 self._createChildList()
                 return self.childList[index]
 
     #input xml tree elem, create the node wrap    
     def _createChildByTag(self,elem):
+        #return none if element given from etree is none.
         if elem == None:
             return None
         #create the new node according to type
         if elem.tag == "seq":
             from seqnode import SeqNode
             return SeqNode(elem,self.myTree,self)
+        #tsk type child
         if elem.tag == "tsk":
             from tsknode import TskNode
             return TskNode(elem,self.myTree,self)
@@ -157,6 +159,7 @@ class node:
         if elem.tag == "dec":
             #createDecNodeFromName will append the right child to self
             return self._CreatDecoratorNodesFromName(elem)
+        #loop child type
         if elem.tag == "loop":
             from loopnode import LoopNode
             return LoopNode(elem,self.myTree,self)
@@ -164,23 +167,22 @@ class node:
         if elem.tag == "not":
            from notnode import NotNode
            return NotNode(elem,self.myTree,self)
-        #parallel        
+        #parallel child type    
         if elem.tag =="par": 
             from parallelnode import ParallelNode 
             return ParallelNode(elem,self.myTree,self)
-        #selector
+        #selector child type
         if elem.tag =="sel": 
             from selectnode import SelectNode 
             return SelectNode(elem,self.myTree,self)
                 
                         
-            
+    #print the tree to xml- can be done from every node in the tree.       
     def treeToXml(self,fileName):
-       root =self.myTree.getRoot()
-       self._updateEtreeToPrintXmlFile(root)
+       #call treeToXml.
        self.myTree.treeToXml(fileName)
          
-         
+     #set monitor boolean property    
     def setMonitor(self,boolSet):
         self.monitor = boolSet
     
@@ -215,8 +217,7 @@ class node:
                         #if char is "L"- create loop node
                         if char == "L" :
                             #addNode func- create the node by tag and appand it to self.childList
-                            newChild = self.createNode("loop")
-                            
+                            newChild = self.createNode("loop")   
                         #if char is "!" - create not node
                         else:
                             if char == "!":
@@ -225,16 +226,18 @@ class node:
                             newChild.treeInst.text = ident
                             newChild.treeInst.tail = identTail
                 #after we create newChild we'll appand it all the other- by newChild.addNode func.
-                else:                    
+                else:
                     if lastChild == None:
+                            #this is the only child of newChild
                             if char == "L" :
                                 lastChild = newChild.addNode("loop")
                                 
                             if char == "!":
                                 lastChild = newChild.addNode("not")
-                                
                             if lastChild!= None:
+                                #treeInst.text update- make the xml file readable with indentation
                                 lastChild.treeInst.text = ident
+                                #indentation of head and tail
                                 lastChild.treeInst.tail = identTail
                     else:
                             if char == "L" :
@@ -251,49 +254,62 @@ class node:
         #if we succeded to create newChild and hid children we will give the last node all decorator attributes by deepcopy dec-treeInst                
         if lastChild !=None :
             lastChildParent =  lastChild.treeInst.getparent()
-            #assigning the new tag for dec attributes not/loop.
+            #assigning the new tag for dec attributes not/loop- in element-etree
             if lastChild.treeInst.tag == "not":
                 newEtreeInst.tag="not"
             if lastChild.treeInst.tag == "loop":
                 newEtreeInst.tag="loop"
             #maintain the pointers with the etree and node tree to point the updated nodes.
-           
+            #remove lastChild.tree inst from his parent
             lastChildParent.remove(lastChild.treeInst)
+            #give lastChild a new Tree inst- so he holds all the dec attributes from the xmltree
             lastChild.treeInst = newEtreeInst
+            #append the treeInst back to his parent child list
             lastChildParent.append(lastChild.treeInst)
             
         #if we didn't create newChild any other children- exmple- <dec name ="L /dec>
-        #we create only new child as loop- we'll git it decorator attributes.
+        #we create only new child as loop- we'll give it decorator attributes.
         else:
             if newChild != None:
+                #assigning the new tag for dec attributes not/loop- in element-etree
                 if newChild.treeInst.tag == "not":
                     newEtreeInst.tag="not"
                 if newChild.treeInst.tag == "loop":
                     newEtreeInst.tag="loop"
+                #remove newChild.tree inst from his parent
                 (parent).remove(newChild.treeInst)
+                #give newChild a new Tree inst- so he holds all the dec attributes from the xmltree
                 newChild.treeInst = newEtreeInst
+                #append the treeInst back to his parent child list updated
                 (parent).append(newChild.treeInst)
             
        #after reading it name and creating nodes as necessary we want to replace this subElement with the updated tree and update the xml tree(used to be decorator)
        #replace(self, old_element, new_element)
         parent.replace(element, newChild.treeInst)
         self._updateChildForDec(newChild , len(name))
+        #return the newChild created.- return the root of the list/sub-tree
         return newChild
-       
-    def _updateChildForDec(self,newChild,num):      
+    #update the childs that we create for decorator property   
+    def _updateChildForDec(self,newChild,size):      
       childToCheck = newChild
-      for i in range(num):
+      #size- is the size of name string- the amount of childs we created.
+      for i in range(size):
+          #for each child we want to update his property
         	if childToCheck != None:
+                 #update child debug
                   childToCheck._updateChildDebug()
+                  #update distributions tables
                   childToCheck.distTableSucc = self.createDistTable("Successdistribution")
                   childToCheck.distTableFail = self.createDistTable("Failuredistribution")
+                  #get the next child
                   childToCheck = childToCheck.getChild(0)
              
       
-	
+     #this func update the etree in order to print the new value in the xml file
     def _updateEtreeToPrintXmlFile(self,updateNode):
             if updateNode == None :
                 return None
+            #turn distribution table to a string that we know how to read from xml file
             if updateNode.distTableSucc != [] :
                 updateNode.setAttrib("Successdistribution",updateNode._distTableToString(updateNode.distTableSucc))
             if updateNode.distTableFail != [] :  
@@ -303,16 +319,16 @@ class node:
             #iterate over child list with recursive call (list of lists)  
             if childList != None :
                 for child in childList :
+                    #update everyChild in the tree
                     self._updateEtreeToPrintXmlFile(child)                    
             #update Debug attributes in the xml file.        
             updateNode._updateDebugAttribToXmlFile()
      
                
-   #this func update the attribute in the xml file for debug 
+   #this func update the attribute in the xml file for debug - turn DEBUG- into a string and set etree attribute
     def _updateDebugAttribToXmlFile(self):
             if self.DEBUG != None:
                 updateString =""
-                
                 if self.DEBUG[0]== True or self.DEBUG[0]=="True":
                     updateString+="True"+" "
                 else :
@@ -353,8 +369,8 @@ class node:
             return self.distTableFail[index]
         
     def _updateChildDebug(self):
+        #iterate on all the element sub-tree which are from type-tree.Element
         for element in self.treeInst.iter(tag=etree.Element):
-	    
             if element.get("DEBUG") != None:
                 self.DEBUGchild = True
                 break
@@ -362,10 +378,10 @@ class node:
     #return true/false if the node has a debug child         
     def hasDebugChild(self):
         return self.DEBUGchild
-        
+    #append a new distribution to the succ table    
     def addDistToSuccTable(self, dist):
         self.distTableSucc.append(dist)
-
+    #append a new distribution to the fail table
     def addDistToFailTable(self, dist):
         self.distTableFail.append(dist)
         
@@ -398,53 +414,71 @@ class node:
             return None
         return (x <= p)
    
-
+   #set prob table- set the probtable property- input- list of float
+   #update the attribute in the etree
     def setProbTable(self, probtable):
         self.probTable = probtable
         self.setAttrib("probability",probtable)
         
-        
+    #set distribution success table with distTable- list of pointers to distributions.
+    #update the attribute in the etree        
     def setDistTableSucc(self, distTable):
         self.distTableSucc = distTable
         self.setAttrib("Successdistribution",self._distTableToString(self.distTableSucc))
-           
+    
+    #set distribution fail table with distTable- list of pointers to distributions.
+    #update the attribute in the etree              
     def setDistTableFail(self, distTable):
         self.distTableFail = distTable
         self.setAttrib("Failuredistribution",self._distTableToString(self.distTableFail))    
       
-        
+     #update prob table at index with index and val given   
     def updateProbTableAtIndex(self, index, val):
         if (self.probTable==None or len(self.probTable)==0 ):
             a = []
+            #if the prob table is empty- create a probe table at the size of 2^parmetersInTheWorld
             for i in range(int(math.pow(2,node.parmetersInTheWorld))):
                 a.append([0,0])
+            #update probe table
             self.setProbTable(a)
         if val:
+            #if val is set to True- update another success . probTable[0]- count succ-numerator,probTable[1]-Counter of time tried-Denominator.
             self.probTable[index][0] = self.probTable[index][0]+1
             self.probTable[index][1] = self.probTable[index][1]+1
+            #update the new probtable in etree
             self._updateProbTableToXmlFile()            
         else:
+            #val is false
+            # probTable[0]- count succ-numerator,probTable[1]-Counter of time tried-Denominator.
             self.probTable[index][1] = self.probTable[index][1]+1
+            #update the new probtable in etree
             self._updateProbTableToXmlFile() 
             
-            
+    #update the etree in order to print the calculated value to xml file of probtable        
     def _updateProbTableToXmlFile(self):
         if (self.probTable==None or len(self.probTable)==0 ):
             return
+        #turn probtable from list of flost to a string that we can read back from xml file
         probTableString = ""
         for index in self.probTable :
+            #if each index in the table has a numerator and denominator- then caculate the prob value
              if len(index) == 2 :
                  if float(index[1]) != 0 :
+                     #string concatenation
                      probTableString += str(float(index[0])/float(index[1]))
                  else:
+                     #string concatenation
                      probTableString += '0'                                                  
              else :
-                probTableString += str(index)                
+                 #string concatenation
+                probTableString += str(index)
+            #string concatenation- white space between the values
              probTableString +=' '
+        #set probability attribute in etree
         self.setAttrib("probability",probTableString)
             
                 
-        
+     #set distributaion success table at index with time   
     def setDistTableSuccAtIndex(self, index, time):
         if (self.distTableSucc==[]):
             a = []
@@ -455,7 +489,7 @@ class node:
         self.distTableSucc[index].setValueToTime(time, self.distTableSucc[index].getCountByTime(time)+1)
         self.setAttrib("Successdistribution",self._distTableToString(self.distTableSucc))
             
-    
+       #set distributaion fail table  at index with time 
     def setDistTableFailAtIndex(self, index, time):
         if (self.distTableFail==[]):
             a = []          
@@ -468,18 +502,21 @@ class node:
         
    
 
-    #getter for probIndex
+    #getter for probIndex return flosat
     def getProbAtIndex(self,index):
         if self.probTable!=None and len(self.probTable) > index:
+            #check if the index is a probability numer- float
             if (isinstance(self.probTable[index],float) or isinstance(self.probTable[index],int) or 
                 (isinstance(self.probTable[index],str))):  
                 return float(self.probTable[index])
             else:
-                if float(self.probTable[index][1]) !=0 :           
+                #this entry is a list of two parms- # probTable[0]- count succ-numerator,probTable[1]-Counter of time tried-Denominator.
+                if float(self.probTable[index][1]) !=0 :   
+                    #return the caculated value
                     return (float(self.probTable[index][0])/float(self.probTable[index][1]))
                 return 0
         return None
-     
+    #node- run func 
     def run(self, index):
         a = None
         if (node.debugMode):
@@ -496,14 +533,14 @@ class node:
         return a
     
 
-   
+   #set debug - recive a string exmp. "True 100"
     def setDebug(self, succtime):
         self.DEBUG = self._parseString(succtime)    
         self.DEBUG[1] = float(self.DEBUG[1])
         #self.setAttrib("DEBUG", self.DEBUG )
         self._updateDebugAttribToXmlFile()
         
-    
+    #run as base case func
     def runAsBaseCase (self, index):
         debug = node.run(self, index)
         if (debug!=None):
@@ -520,20 +557,20 @@ class node:
 
         return a
         
-        
+    #get the distributions from distribution table success by index    
     def getDistSuccByIndex(self,index):
         if len(self.distTableSucc) > index:
             return self.distTableSucc[index]
         return None
         
 
-
+    #get the distributions from distribution table fail by index 
     def getDistFailByIndex(self,index):
         if len(self.distTableFail) > index:
             return self.distTableFail[index]
         return None 
         
-        
+   #clear the node property    
     def clear (self):
        self.probTable = []
        self.distTableSucc = []
@@ -543,11 +580,12 @@ class node:
        self.setAttrib("Failuredistribution",[])  
        self.reset = True
        
-       
+     #run plan  
     def runPlan(self, index):
       children = self.getChildren()
       children[0].run(index) 
 
+    #get average to success time
     def getAverageSuccTime(self, index):
         return self.getDistSuccByIndex(index).calcAverageTime()
         
@@ -577,7 +615,6 @@ class node:
                 #iniform dist- create new instance and 
                 if(table[index][0] == 'U'):
                     x=self._createUniformDist(table[index])
-    #                x.printMe()
                     newDistTable.append(x)
 
         return newDistTable
